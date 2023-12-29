@@ -10,7 +10,8 @@
             <h2 class="text-primary">Create Company</h2>
             <hr/>
         </div>
-        <div class="mb-3 row">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="mb-3 row p-1">
             <label asp-for="Name" class="p-0"></label>
             <input asp-for="Name" type="text" class="form-control"/>
             <span asp-validation-for="Name" class="text-danger"></span>
@@ -33,3 +34,10 @@
         
     </div>
 </form>
+
+                
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}
