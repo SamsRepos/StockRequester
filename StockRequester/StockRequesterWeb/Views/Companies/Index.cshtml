@@ -1,0 +1,23 @@
+﻿@model List<Company>
+
+<h1>Companies List</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>
+            Company Name
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model.OrderBy(u=>u.Name))
+        {
+            <tr>
+                <td>
+                    @obj.Name
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

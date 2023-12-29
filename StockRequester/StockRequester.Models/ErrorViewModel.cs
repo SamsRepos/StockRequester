@@ -1,4 +1,4 @@
-namespace StockRequesterWeb.Models
+namespace StockRequester.Models
 {
     public class ErrorViewModel
     {

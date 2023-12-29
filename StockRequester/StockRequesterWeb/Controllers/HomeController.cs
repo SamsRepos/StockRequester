@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using StockRequesterWeb.Models;
+using StockRequester.Models;
 using System.Diagnostics;
 
 namespace StockRequesterWeb.Controllers
