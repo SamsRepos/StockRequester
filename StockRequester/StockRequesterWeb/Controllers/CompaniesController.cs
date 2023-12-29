@@ -18,5 +18,23 @@ namespace StockRequesterWeb.Controllers
             return View(objCompaniesList);
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Company obj)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            _db.Companies.Add(obj);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
