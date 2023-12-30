@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StockRequester.Models
 {
@@ -16,8 +11,13 @@ namespace StockRequester.Models
         [MaxLength(40)]
         [DisplayName("Company Name")]
         public string Name { get; set; }
-        // collection of locations
-        // collection of transfer requests, or, rather, transfer request ids
-        // collection of reason tags
+        
+        
+        // The following, probably not contained as collection
+        // rather, to be associated by foreign key relation:
+        //
+        // locations
+        // transfer requests, or, rather, transfer request ids
+        // reason tags
     }
 }

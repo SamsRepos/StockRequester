@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockRequester.DataAccess.Data;
+using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 
 namespace StockRequesterWeb.Controllers
 {
     public class CompaniesController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CompaniesController(ApplicationDbContext db)
+        private readonly IUnitOfWork _unitOfWork;
+        public CompaniesController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            List<Company> objCompaniesList = _db.Companies.ToList();
-            return View(objCompaniesList);
+            List<Company> companiesList = _unitOfWork.Company.GetAll().ToList();
+            return View(companiesList);
         }
 
         public IActionResult Create()
@@ -27,7 +28,8 @@ namespace StockRequesterWeb.Controllers
         public IActionResult Create(Company obj)
         {
             if(obj.Name is not null &&
-              (_db.Companies.FirstOrDefault(u => u.Name.ToLower() == obj.Name.ToLower()) is not null))
+              (_unitOfWork.Company.Get(u => u.Name.ToLower() == obj.Name.ToLower()) is not null))
+            //(_db.Companies.FirstOrDefault(u => u.Name.ToLower() == obj.Name.ToLower()) is not null))
             {
                 ModelState.AddModelError(
                     "name",
@@ -40,8 +42,8 @@ namespace StockRequesterWeb.Controllers
                 return View();
             }
 
-            _db.Companies.Add(obj);
-            _db.SaveChanges();
+            _unitOfWork.Company.Add(obj);
+            _unitOfWork.Save();
             TempData["success"] = $"Company \"{obj.Name}\" created successfully";
             return RedirectToAction(nameof(Index));
         }
@@ -53,7 +55,7 @@ namespace StockRequesterWeb.Controllers
                 return NotFound();
             }
 
-            Company? companyFromDb = _db.Companies.Find(id);
+            Company? companyFromDb = _unitOfWork.Company.Get(u=>u.Id == id);
             if(companyFromDb is null)
             {
                 return NotFound();
@@ -70,8 +72,8 @@ namespace StockRequesterWeb.Controllers
                 return View();
             }
 
-            _db.Companies.Update(obj);
-            _db.SaveChanges();
+            _unitOfWork.Company.Update(obj);
+            _unitOfWork.Save();
             TempData["success"] = $"Company \"{obj.Name}\" updated successfully";
             return RedirectToAction(nameof(Index));
         }
@@ -83,7 +85,7 @@ namespace StockRequesterWeb.Controllers
                 return NotFound();
             }
 
-            Company? companyFromDb = _db.Companies.Find(id);
+            Company? companyFromDb = _unitOfWork.Company.Get(u => u.Id == id);
 
             if (companyFromDb is null)
             {
@@ -96,15 +98,15 @@ namespace StockRequesterWeb.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Company? companyFromDb = _db.Companies.Find(id);
+            Company? companyFromDb = _unitOfWork.Company.Get(u => u.Id == id);
 
             if (companyFromDb is null)
             {
                 return NotFound();
             }
 
-            _db.Companies.Remove(companyFromDb);
-            _db.SaveChanges();
+            _unitOfWork.Company.Remove(companyFromDb);
+            _unitOfWork.Save();
             TempData["success"] = $"Company \"{companyFromDb.Name}\" deleted successfully";
             return RedirectToAction(nameof(Index));
         }

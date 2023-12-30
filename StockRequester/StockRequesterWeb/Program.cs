@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StockRequester.DataAccess.Data;
+using StockRequester.DataAccess.Repository.IRepository;
+using StockRequester.DataAccess.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(connectionString)
 );
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
