@@ -11,8 +11,8 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231230062532_AddingAndSeedingCompaniesAndLocations")]
-    partial class AddingAndSeedingCompaniesAndLocations
+    [Migration("20231230171654_AddingAndSeedingComapniesAndLocations")]
+    partial class AddingAndSeedingComapniesAndLocations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

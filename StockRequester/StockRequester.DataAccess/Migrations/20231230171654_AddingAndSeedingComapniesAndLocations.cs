@@ -7,7 +7,7 @@
 namespace StockRequester.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingAndSeedingCompaniesAndLocations : Migration
+    public partial class AddingAndSeedingComapniesAndLocations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
