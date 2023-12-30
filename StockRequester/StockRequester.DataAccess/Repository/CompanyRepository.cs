@@ -15,7 +15,6 @@ namespace StockRequester.DataAccess.Repository
             : 
             base(db)
         {
-            
         }
 
         public void Update(Company obj)

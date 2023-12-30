@@ -15,6 +15,9 @@ namespace StockRequester.Models
         [Required] public string Reason { get; set; }
         [Required] public Location LocationFrom { get; set; }
         [Required] public Location LocationTo { get; set; }
+        // this even allows for transfers between locations at different companies
+        //   potentially - future implementation maybe
+
         // status - requested, pending, sent, arrived/complete
         // estimated date - a response from locationFrom
         public string MiscNotes { get; set; }

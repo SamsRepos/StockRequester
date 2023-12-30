@@ -12,10 +12,12 @@ namespace StockRequester.DataAccess.Repository
     {
         private ApplicationDbContext _db;
         public ICompanyRepository Company {  get; private set; }
+        public ILocationRepository Location { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             Company = new CompanyRepository(_db);
+            Location = new LocationRepository(_db);
         }
         public void Save()
         {

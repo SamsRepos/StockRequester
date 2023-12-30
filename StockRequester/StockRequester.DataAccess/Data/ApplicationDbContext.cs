@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockRequester.Models;
+using System.ComponentModel.Design;
 
 namespace StockRequester.DataAccess.Data
 {
@@ -9,10 +10,10 @@ namespace StockRequester.DataAccess.Data
             : 
             base(options)
         {
-            
         }
 
         public DbSet<Company> Companies { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,6 +23,15 @@ namespace StockRequester.DataAccess.Data
                 new Company { Id = 1, Name = "Bulky Books" },
                 new Company { Id = 2, Name = "Water Rocks" },
                 new Company { Id = 3, Name = "Nice Books" }
+            );
+
+            modelBuilder.Entity<Location>().HasData(
+                new Location 
+                { 
+                    Id        = 1, 
+                    Name      = "Edinburgh",
+                    CompanyId = 1
+                }
             );
         }
     }

@@ -9,6 +9,7 @@ namespace StockRequester.DataAccess.Repository.IRepository
     public interface IUnitOfWork
     {
         ICompanyRepository Company {  get; }
+        ILocationRepository Location { get; }
         public void Save();
     }
 }
