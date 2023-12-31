@@ -98,6 +98,11 @@ namespace StockRequesterWeb.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
+            if (id is null || id == 0)
+            {
+                return NotFound();
+            }
+
             Company? companyFromDb = _unitOfWork.Company.Get(u => u.Id == id);
 
             if (companyFromDb is null)

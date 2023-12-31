@@ -100,6 +100,46 @@ namespace StockRequesterWeb.Controllers
             //return RedirectToAction(nameof(Index), new { id = obj.CompanyId } );
         }
 
+        public IActionResult Delete(int? id)
+        {
+            if (id is null || id == 0)
+            {
+                return NotFound();
+            }
+
+            Location? locationFromDb = _unitOfWork.Location.Get(u => u.Id == id);
+
+            if (locationFromDb is null)
+            {
+                return NotFound();
+            }
+
+            return View(locationFromDb);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int? id)
+        {
+            if (id is null || id == 0)
+            {
+                return NotFound();
+            }
+
+            Location? locationFromDb = _unitOfWork.Location.Get(u => u.Id == id);
+
+            int companyId = locationFromDb.CompanyId;
+
+            if (locationFromDb is null)
+            {
+                return NotFound();
+            }
+
+            _unitOfWork.Location.Remove(locationFromDb);
+            _unitOfWork.Save();
+            TempData["success"] = $"Location \"{locationFromDb.Name}\" deleted successfully";
+            return View(nameof(Index), GetLocationsViewModel(companyId));
+        }
+
         //
         // PRIVATE:
         //
@@ -113,11 +153,13 @@ namespace StockRequesterWeb.Controllers
 
         private LocationsViewModel GetLocationsViewModel(int companyId)
         {
-            return new LocationsViewModel()
+            LocationsViewModel result = new LocationsViewModel()
             {
                 Locations = LocationsAtCompany(companyId),
                 Company = _unitOfWork.Company.Get(u=>u.Id == companyId)
             };
+
+            return result;
         }
         
     }
