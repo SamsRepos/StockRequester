@@ -1,19 +1,19 @@
-﻿@{
-    ViewData["Title"] = "Locations";
-}
+﻿@model Company
 
-@model Company
+@{
+    ViewData["Title"] = Model.Name;
+}
 
 <div class="container">
     <div class="row pt-4">
         <div class="col-6">
             <h2 class="text-primary">
-                Locations List
+                Transfer Requests
             </h2>
         </div>
         <div class="col-6 text-end">
-            <a asp-controller="Location" asp-action="Upsert" asp-route-companyId="@Model.Id" asp-route-id="@null" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Create A New Location
+            <a asp-controller="TransferRequest" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Create A New Transfer Request
             </a>
         </div>
     </div>
@@ -23,13 +23,13 @@
     <thead>
         <tr>
             <th class="text-white">
-                <b>Location Name</b>
+                <b>Transfer Request Name</b>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var obj in Model.Locations.OrderBy(u => u.Name))
+        @* @foreach (var obj in Model.OrderBy(u => u.Name))
         {
             <tr>
                 <td class="text-white">
@@ -37,15 +37,20 @@
                 </td>
                 <td>
                     <div class="w-100 btn-group" role="group">
-                        <a asp-controller="Location" asp-action="Upsert" asp-route-companyId="@Model.Id" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
+                        <a asp-controller="Companies" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
                             <i class="bi bi-pencil"></i> Edit
                         </a>
-                        <a asp-controller="Location" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2">
+
+                        <a asp-controller="Location" asp-action="Index" asp-route-companyId="@obj.Id" class="btn btn-secondary mx-2">
+                            <i class="bi bi-pin-map"></i> Locations
+                        </a>
+
+                        <a asp-controller="Companies" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2">
                             <i class="bi bi-trash3"></i> Delete
                         </a>
                     </div>
                 </td>
             </tr>
-        }
+        } *@
     </tbody>
 </table>

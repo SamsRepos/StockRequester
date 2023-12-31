@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
-using StockRequester.Models.ViewModels;
-using System.ComponentModel.Design;
 
 namespace StockRequesterWeb.Controllers
 {
@@ -18,8 +15,12 @@ namespace StockRequesterWeb.Controllers
 
         public IActionResult Index(int companyId)
         {
-            var viewModel = GetLocationsViewModel(companyId);
-            return View(viewModel);
+            Company company = _unitOfWork.Company.Get(
+                (u => u.Id == companyId),
+                includeProperties: nameof(Company.Locations)
+            );
+
+            return View(company);
         }
 
         public IActionResult Upsert(int companyId, int? id)
@@ -44,8 +45,8 @@ namespace StockRequesterWeb.Controllers
             if(locationAlreadyExists) // update
             {
                 location = _unitOfWork.Location.Get(
-                    u => u.Id == id,
-                    includeProperties:"Company"
+                    (u => u.Id == id),
+                    includeProperties: nameof(Company)
                 );
             }
             else // insert
@@ -64,7 +65,13 @@ namespace StockRequesterWeb.Controllers
         [HttpPost]
         public IActionResult Upsert(Location obj)
         {
-            Location? anyOtherWithSameName = LocationsAtCompany(obj.CompanyId).Find(location => location.Name.ToLower() == obj.Name.ToLower());
+            Company company = _unitOfWork.Company.Get(
+                (u => u.Id == obj.CompanyId),
+                includeProperties: nameof(Company.Locations)
+            );
+            
+
+            Location? anyOtherWithSameName = company.Locations.ToList().Find(location => location.Name.ToLower() == obj.Name.ToLower());
             if (
               obj.Name is not null &&
               anyOtherWithSameName is not null &&
@@ -96,8 +103,7 @@ namespace StockRequesterWeb.Controllers
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{obj.Name}\" {(locationAlreadyExists ? "updated" : "created")} successfully";
 
-            return View(nameof(Index), GetLocationsViewModel(obj.CompanyId));
-            //return RedirectToAction(nameof(Index), new { id = obj.CompanyId } );
+            return RedirectToAction(nameof(Index), new { companyId = obj.CompanyId } );
         }
 
         public IActionResult Delete(int? id)
@@ -127,40 +133,19 @@ namespace StockRequesterWeb.Controllers
 
             Location? locationFromDb = _unitOfWork.Location.Get(u => u.Id == id);
 
-            int companyId = locationFromDb.CompanyId;
-
             if (locationFromDb is null)
             {
                 return NotFound();
             }
 
+            int companyId = locationFromDb.CompanyId;
+            
             _unitOfWork.Location.Remove(locationFromDb);
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{locationFromDb.Name}\" deleted successfully";
-            return View(nameof(Index), GetLocationsViewModel(companyId));
+
+            return RedirectToAction(nameof(Index), new { companyId = companyId });
         }
 
-        //
-        // PRIVATE:
-        //
-
-        private List<Location> LocationsAtCompany(int companyId)
-        {
-            List<Location> allLocationsList = _unitOfWork.Location.GetAll(includeProperties: "Company").ToList();
-            List<Location> companyLocationsList = allLocationsList.Where(u => u.CompanyId == companyId).ToList();
-            return companyLocationsList;
-        }
-
-        private LocationsViewModel GetLocationsViewModel(int companyId)
-        {
-            LocationsViewModel result = new LocationsViewModel()
-            {
-                Locations = LocationsAtCompany(companyId),
-                Company = _unitOfWork.Company.Get(u=>u.Id == companyId)
-            };
-
-            return result;
-        }
-        
     }
 }

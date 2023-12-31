@@ -18,10 +18,15 @@ namespace StockRequester.Models
         [DisplayName("Location Name")]
         public string Name { get; set; }
 
-        public int CompanyId {  get; set; }
+        [Required] public int CompanyId {  get; set; }
 
         [ValidateNever]
         [ForeignKey(nameof(CompanyId))]
+        [InverseProperty(nameof(Company.Locations))]
         public Company Company { get; set; }
+
+        //public ICollection<TransferRequest> TransferRequestsFromHere { get; set; }
+        //public ICollection<TransferRequest> TransferRequestsToHere { get; set; }
+
     }
 }

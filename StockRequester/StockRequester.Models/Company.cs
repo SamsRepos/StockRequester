@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace StockRequester.Models
@@ -11,12 +12,10 @@ namespace StockRequester.Models
         [MaxLength(40)]
         [DisplayName("Company Name")]
         public string Name { get; set; }
-        
-        
-        // The following, probably not contained as collection
-        // rather, to be associated by foreign key relation:
-        //
-        // locations
+
+        [ValidateNever]
+        public ICollection<Location> Locations { get; set; }
+      
         // transfer requests, or, rather, transfer request ids
         // reason tags
     }

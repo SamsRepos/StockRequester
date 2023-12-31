@@ -7,7 +7,7 @@
 namespace StockRequester.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingAndSeedingComapniesAndLocations : Migration
+    public partial class CreateAndSeedTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,19 @@ namespace StockRequester.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Companies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TransferRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Item = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TransferRequests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,9 +69,18 @@ namespace StockRequester.DataAccess.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "TransferRequests",
+                columns: new[] { "Id", "Item" },
+                values: new object[] { 1, "Harry Potter" });
+
+            migrationBuilder.InsertData(
                 table: "Locations",
                 columns: new[] { "Id", "CompanyId", "Name" },
-                values: new object[] { 1, 1, "Edinburgh" });
+                values: new object[,]
+                {
+                    { 1, 1, "Edinburgh" },
+                    { 2, 1, "Glasgow" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Locations_CompanyId",
@@ -71,6 +93,9 @@ namespace StockRequester.DataAccess.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "TransferRequests");
 
             migrationBuilder.DropTable(
                 name: "Companies");

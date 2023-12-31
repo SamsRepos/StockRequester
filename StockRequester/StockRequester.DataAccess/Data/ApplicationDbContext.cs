@@ -14,6 +14,7 @@ namespace StockRequester.DataAccess.Data
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<TransferRequest> TransferRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,11 +27,21 @@ namespace StockRequester.DataAccess.Data
             );
 
             modelBuilder.Entity<Location>().HasData(
-                new Location 
-                { 
-                    Id        = 1, 
-                    Name      = "Edinburgh",
-                    CompanyId = 1
+                new Location { Id = 1, Name = "Edinburgh", CompanyId = 1 },
+                new Location { Id = 2, Name = "Glasgow",   CompanyId = 1}
+            );
+
+            modelBuilder.Entity<TransferRequest>().HasData(
+                new TransferRequest
+                {
+                    Id              = 1,
+                    Item            = "Harry Potter",
+                    //Quantity        = 10,
+                    //Reason          = "Need more",
+                    ////CompanyId       = 1,
+                    //LocationFromId  = 1,
+                    //LocationToId    = 2
+
                 }
             );
         }

@@ -11,8 +11,8 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231230171654_AddingAndSeedingComapniesAndLocations")]
-    partial class AddingAndSeedingComapniesAndLocations
+    [Migration("20231231194926_CreateAndSeedTables")]
+    partial class CreateAndSeedTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,18 +86,53 @@ namespace StockRequester.DataAccess.Migrations
                             Id = 1,
                             CompanyId = 1,
                             Name = "Edinburgh"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CompanyId = 1,
+                            Name = "Glasgow"
+                        });
+                });
+
+            modelBuilder.Entity("StockRequester.Models.TransferRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Item")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransferRequests");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Item = "Harry Potter"
                         });
                 });
 
             modelBuilder.Entity("StockRequester.Models.Location", b =>
                 {
                     b.HasOne("StockRequester.Models.Company", "Company")
-                        .WithMany()
+                        .WithMany("Locations")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("StockRequester.Models.Company", b =>
+                {
+                    b.Navigation("Locations");
                 });
 #pragma warning restore 612, 618
         }
