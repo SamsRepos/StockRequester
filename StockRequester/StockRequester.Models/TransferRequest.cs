@@ -46,6 +46,7 @@ namespace StockRequester.Models
         // Destination Location (where the request comes from):
         //
 
+        [Required]
         [Display(Name = "Destination Location")]
         public int? DestinationLocationId { get; set; }
 
@@ -58,6 +59,7 @@ namespace StockRequester.Models
         // Origin Location:
         //
 
+        [Required]
         [Display(Name = "Origin Location")]
         public int? OriginLocationId { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockRequester.Models;
 using System.ComponentModel.Design;
+using System.Reflection.Emit;
 
 namespace StockRequester.DataAccess.Data
 {
@@ -18,8 +19,6 @@ namespace StockRequester.DataAccess.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Company>().HasData(
                 new Company { Id = 1, Name = "Bulky Books" },
                 new Company { Id = 2, Name = "Water Rocks" },
@@ -44,6 +43,15 @@ namespace StockRequester.DataAccess.Data
 
                 }
             );
+
+            // dealing with multiple foreign keys delete cascade issue 
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
+            //
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

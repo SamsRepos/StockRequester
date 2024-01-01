@@ -7,7 +7,7 @@
 namespace StockRequester.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateAndSeedTables : Migration
+    public partial class FirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,7 +42,7 @@ namespace StockRequester.DataAccess.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,8 +55,8 @@ namespace StockRequester.DataAccess.Migrations
                     Item = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DestinationLocationId = table.Column<int>(type: "int", nullable: true),
-                    OriginLocationId = table.Column<int>(type: "int", nullable: true),
+                    DestinationLocationId = table.Column<int>(type: "int", nullable: false),
+                    OriginLocationId = table.Column<int>(type: "int", nullable: false),
                     MiscNotes = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -67,17 +67,19 @@ namespace StockRequester.DataAccess.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TransferRequests_Locations_DestinationLocationId",
                         column: x => x.DestinationLocationId,
                         principalTable: "Locations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TransferRequests_Locations_OriginLocationId",
                         column: x => x.OriginLocationId,
                         principalTable: "Locations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(

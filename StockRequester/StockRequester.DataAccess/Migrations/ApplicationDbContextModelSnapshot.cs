@@ -105,6 +105,7 @@ namespace StockRequester.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("DestinationLocationId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Item")
@@ -115,6 +116,7 @@ namespace StockRequester.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OriginLocationId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -152,7 +154,7 @@ namespace StockRequester.DataAccess.Migrations
                     b.HasOne("StockRequester.Models.Company", "Company")
                         .WithMany("Locations")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -163,16 +165,20 @@ namespace StockRequester.DataAccess.Migrations
                     b.HasOne("StockRequester.Models.Company", "Company")
                         .WithMany("TransferRequests")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StockRequester.Models.Location", "DestinationLocation")
                         .WithMany("TransferRequestsToThisDestination")
-                        .HasForeignKey("DestinationLocationId");
+                        .HasForeignKey("DestinationLocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("StockRequester.Models.Location", "OriginLocation")
                         .WithMany("TransferRequestsFromThisOrigin")
-                        .HasForeignKey("OriginLocationId");
+                        .HasForeignKey("OriginLocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Company");
 
