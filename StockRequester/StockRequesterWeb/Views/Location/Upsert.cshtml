@@ -24,14 +24,16 @@
 
         <div class="row p-1">
             <div class="col-6 col-md-3">
-                <button type="submit" class="btn btn-primary" style="width:150px">
-                    <i class="bi bi-check-circle"></i> @(Model.Id != 0 ? "Update" : "Create")
-                </button>
+                <div class="w-100 btn-group" role="group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> @(Model.Id != 0 ? "Update" : "Create")
+                    </button>
+                    <a asp-controller="Company" asp-action="Index" asp-route-companyId="@Model.CompanyId" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Back to Company View
+                    </a>
+                </div>
             </div>
             <div class="col-6 col-md-3">
-                <a asp-controller="Company" asp-action="Index" asp-route-companyId="@Model.CompanyId" class="btn btn-secondary" style="width:150px">
-                    <i class="bi bi-arrow-left-circle"></i> Back to Company View
-                </a>
             </div>
         </div>
 

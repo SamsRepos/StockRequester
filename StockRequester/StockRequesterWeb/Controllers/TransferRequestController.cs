@@ -17,7 +17,7 @@ namespace StockRequesterWeb.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Upsert(int companyId, int? id)
+        public IActionResult Upsert(int companyId, int? id, int? originLocationId, int? destinationLocationId, int? backLocationId)
         {
             if (companyId == 0)
             {
@@ -56,6 +56,16 @@ namespace StockRequesterWeb.Controllers
                 tr.Company = companyFromDb;
             }
 
+            if(originLocationId is not null && originLocationId != 0)
+            {
+                tr.OriginLocationId = originLocationId;
+            }
+
+            if(destinationLocationId is not null && destinationLocationId != 0)
+            {
+                tr.DestinationLocationId = destinationLocationId;
+            }
+
             IEnumerable<SelectListItem> companyLocationsList = companyFromDb.Locations.Select(
                 u => new SelectListItem
                 {
@@ -67,7 +77,8 @@ namespace StockRequesterWeb.Controllers
             TransferRequestViewModel trVm = new()
             {
                 TransferRequest = tr,
-                CompanyLocationsList = companyLocationsList
+                CompanyLocationsList = companyLocationsList,
+                BackLocation = backLocationId is not null ? _unitOfWork.Location.Get(u=>u.Id==backLocationId) : null
             };
 
             return View(trVm);

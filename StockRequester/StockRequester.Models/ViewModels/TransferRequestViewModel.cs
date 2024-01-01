@@ -14,5 +14,7 @@ namespace StockRequester.Models.ViewModels
         
         [ValidateNever]
         public IEnumerable<SelectListItem> CompanyLocationsList { get; set; }
+
+        public Location? BackLocation { get; set; }
     }
 }
