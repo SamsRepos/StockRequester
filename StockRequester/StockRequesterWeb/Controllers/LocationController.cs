@@ -114,7 +114,10 @@ namespace StockRequesterWeb.Controllers
                 return NotFound();
             }
 
-            Location? locationFromDb = _unitOfWork.Location.Get(u => u.Id == id);
+            Location? locationFromDb = _unitOfWork.Location.Get(
+                (u => u.Id == id),
+                includeProperties: $"{nameof(Location.TransferRequestsFromThisOrigin)},{nameof(Location.TransferRequestsToThisDestination)}"
+            );
 
             if (locationFromDb is null)
             {

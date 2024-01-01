@@ -36,7 +36,7 @@ namespace StockRequester.Models
         //[Required] public Item Item {  get; set; }
         
         [Required]
-        [Range(1, 1000)]
+        [Range(1, 10000)]
         public int Quantity { get; set; }
         
 
@@ -71,6 +71,7 @@ namespace StockRequester.Models
         //
 
         [Required] public string Reason { get; set; }
+        //[Required] public public ICollection<ReasonTag> Reason { get; set; } with blob string and blob functions
 
         // status - requested, pending, sent, arrived/complete
         // estimated date - a response from origin

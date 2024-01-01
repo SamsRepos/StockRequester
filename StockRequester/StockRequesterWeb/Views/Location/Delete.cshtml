@@ -22,12 +22,29 @@
                         <input asp-for="Name" disabled class="form-control" />
                     </div>
 
-                    <div class="row mt-3">
-                        <div class="col-6 col-md-3">
-                            <button type="submit" class="btn btn-danger form-control">
-                                <i class="bi bi-trash3"></i> Delete Now
-                            </button>
+                    @if (Model.TransferRequestsFromThisOrigin.Count > 0 || Model.TransferRequestsToThisDestination.Count > 0)
+                    {
+                        <div class="form-floating py-2 col-12">
+                            <p>
+                                You cannot delete this location, since the following still exist:<br />
+                                @Model.TransferRequestsFromThisOrigin.Count transfer requests from this origin <br />
+                                @Model.TransferRequestsToThisDestination.Count transfer requests to this destination <br />
+                                <hr />
+                            </p>
                         </div>
+                    }
+
+                    <div class="row mt-3">
+                        @if (Model.TransferRequestsFromThisOrigin.Count == 0 && Model.TransferRequestsToThisDestination.Count == 0)
+                        {
+                            <div class="col-6 col-md-3">
+                            
+                                <button type="submit" class="btn btn-danger form-control">
+                                    <i class="bi bi-trash3"></i> Delete Now
+                                </button>
+                            
+                            </div>
+                        }
                         <div class="col-6 col-md-3">
                             <a asp-controller="Company" asp-action="Index" asp-route-companyId="@Model.CompanyId" class="btn btn-secondary border form-control">
                                 <i class="bi bi-arrow-left-circle"></i> Back to Company View
