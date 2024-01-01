@@ -7,7 +7,9 @@
 <form method="post">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
-            <h2 class="text-primary">@(Model.Id != 0 ? "Rename" : "Create") Location</h2>
+            <h2 class="text-primary">
+                <i class="bi bi-pin-map"></i> @(Model.Id != 0 ? "Rename" : "Create") Location
+            </h2>
             <hr />
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>

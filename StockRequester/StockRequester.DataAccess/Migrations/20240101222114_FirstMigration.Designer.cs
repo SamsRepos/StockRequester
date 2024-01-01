@@ -12,7 +12,7 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240101164302_FirstMigration")]
+    [Migration("20240101222114_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />

@@ -54,9 +54,9 @@ namespace StockRequester.DataAccess.Migrations
                     CompanyId = table.Column<int>(type: "int", nullable: false),
                     Item = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DestinationLocationId = table.Column<int>(type: "int", nullable: false),
                     OriginLocationId = table.Column<int>(type: "int", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MiscNotes = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>

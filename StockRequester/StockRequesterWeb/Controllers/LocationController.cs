@@ -14,14 +14,31 @@ namespace StockRequesterWeb.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index(int companyId)
+        public IActionResult Index(int id)
         {
-            Company company = _unitOfWork.Company.Get(
-                (u => u.Id == companyId),
-                includeProperties: nameof(Company.Locations)
+            Location? locationFromDb = _unitOfWork.Location.Get(
+                (u => u.Id == id),
+                includeProperties: $"{nameof(Location.TransferRequestsFromThisOrigin)},{nameof(Location.TransferRequestsToThisDestination)}"
             );
 
-            return View(company);
+            if (locationFromDb is null)
+            {
+                return NotFound();
+            }
+
+            foreach(TransferRequest tc in locationFromDb.TransferRequestsFromThisOrigin)
+            {
+                tc.OriginLocation      = _unitOfWork.Location.Get(u => u.Id == tc.OriginLocationId);
+                tc.DestinationLocation = _unitOfWork.Location.Get(u => u.Id == tc.DestinationLocationId);
+            }
+
+            foreach (TransferRequest tc in locationFromDb.TransferRequestsToThisDestination)
+            {
+                tc.OriginLocation = _unitOfWork.Location.Get(u => u.Id == tc.OriginLocationId);
+                tc.DestinationLocation = _unitOfWork.Location.Get(u => u.Id == tc.DestinationLocationId);
+            }
+
+            return View(locationFromDb);
         }
 
         public IActionResult Upsert(int companyId, int? id)
