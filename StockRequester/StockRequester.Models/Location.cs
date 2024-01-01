@@ -25,8 +25,8 @@ namespace StockRequester.Models
         [InverseProperty(nameof(Company.Locations))]
         public Company Company { get; set; }
 
-        //public ICollection<TransferRequest> TransferRequestsToThisDestination { get; set; }
-        //public ICollection<TransferRequest> TransferRequestsFromThisOrigin { get; set; }
+        public ICollection<TransferRequest> TransferRequestsToThisDestination { get; set; }
+        public ICollection<TransferRequest> TransferRequestsFromThisOrigin { get; set; }
 
     }
 }

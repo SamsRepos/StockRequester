@@ -34,13 +34,13 @@ namespace StockRequester.DataAccess.Data
             modelBuilder.Entity<TransferRequest>().HasData(
                 new TransferRequest
                 {
-                    Id              = 1,
-                    Item            = "Harry Potter",
-                    //Quantity        = 10,
-                    //Reason          = "Need more",
-                    ////CompanyId       = 1,
-                    //LocationFromId  = 1,
-                    //LocationToId    = 2
+                    Id                    = 1,
+                    Item                  = "Harry Potter",
+                    Quantity              = 10,
+                    Reason                = "Need more",
+                    CompanyId             = 1,
+                    OriginLocationId      = 1,
+                    DestinationLocationId = 2
 
                 }
             );

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using StockRequester.DataAccess.Data;
 using StockRequester.DataAccess.Repository.IRepository;
 using System.Linq.Expressions;
@@ -30,7 +31,7 @@ namespace StockRequester.DataAccess.Repository
                 foreach (var includeProp in includeProperties
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query = query.Include(includeProp);
+                    query = query.Include(includeProp.Trim()) ;
                 }
             }
             return query.FirstOrDefault();

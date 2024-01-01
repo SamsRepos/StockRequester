@@ -17,10 +17,8 @@ namespace StockRequesterWeb.Controllers
         {
             Company obj = _unitOfWork.Company.Get(
                 (u=>u.Id == companyId),
-                includeProperties: "Locations"
+                includeProperties: $"{nameof(Company.TransferRequests)}, {nameof(Company.Locations)}"
             );
-
-            obj.TransferRequests = new List<TransferRequest>();
 
             return View(obj);
         }

@@ -18,6 +18,5 @@ namespace StockRequester.Utility
 
             return controllerType.Name;
         }
-
     }
 }
