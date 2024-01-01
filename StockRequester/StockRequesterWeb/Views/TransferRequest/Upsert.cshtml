@@ -1,0 +1,81 @@
+﻿@model TransferRequestViewModel
+
+@{
+    ViewData["Title"] = $"{(Model.TransferRequest.Id != 0 ? "Edit" : "Create")} Transfer Request";
+}
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">@(Model.TransferRequest.Id != 0 ? "Edit" : "Create") Transfer Request</h2>
+            <hr />
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="TransferRequest.Id" hidden />
+        <input asp-for="TransferRequest.CompanyId" hidden />
+        <input asp-for="TransferRequest.Company" hidden />
+        
+        <div class="mb-3 row p-1">
+            <label asp-for="TransferRequest.Item" class="p-0"></label>
+            <input asp-for="TransferRequest.Item" type="text" class="form-control" />
+            <span asp-validation-for="TransferRequest.Item" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="TransferRequest.Quantity" class="p-0"></label>
+            <input asp-for="TransferRequest.Quantity" type="text" class="form-control" />
+            <span asp-validation-for="TransferRequest.Quantity" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="TransferRequest.Reason" class="p-0"></label>
+            <input asp-for="TransferRequest.Reason" type="text" class="form-control" />
+            <span asp-validation-for="TransferRequest.Reason" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating py-2 col-12">
+            <select asp-for="TransferRequest.OriginLocationId" asp-items="@Model.CompanyLocationsList" class="form-select border-0 shadow">
+                <option disabled selected>--Select Origin Location--</option>
+            </select>
+            <label asp-for="TransferRequest.OriginLocationId" class="ms-2"></label>
+            <span asp-validation-for="TransferRequest.OriginLocationId" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating py-2 col-12">
+            <select asp-for="TransferRequest.DestinationLocationId" asp-items="@Model.CompanyLocationsList" class="form-select border-0 shadow">
+                <option disabled selected>--Select Destination Location--</option>
+            </select>
+            <label asp-for="TransferRequest.DestinationLocationId" class="ms-2"></label>
+            <span asp-validation-for="TransferRequest.DestinationLocationId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="TransferRequest.MiscNotes" class="p-0"></label>
+            <input asp-for="TransferRequest.MiscNotes" type="text" class="form-control" />
+            <span asp-validation-for="TransferRequest.MiscNotes" class="text-danger"></span>
+        </div>
+
+        <div class="row p-1">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary" style="width:150px">
+                    <i class="bi bi-check-circle"></i> @(Model.TransferRequest.Id != 0 ? "Update" : "Create")
+                </button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Company" asp-action="Index" asp-route-companyId="@Model.TransferRequest.CompanyId" class="btn btn-secondary" style="width:150px">
+                    <i class="bi bi-arrow-left-circle"></i> Back to Company View
+                </a>
+            </div>
+        </div>
+
+
+
+    </div>
+</form>
+
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

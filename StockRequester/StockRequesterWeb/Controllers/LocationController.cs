@@ -47,7 +47,7 @@ namespace StockRequesterWeb.Controllers
             {
                 location = _unitOfWork.Location.Get(
                     (u => u.Id == id),
-                    includeProperties: nameof(Company)
+                    includeProperties: nameof(Location.Company)
                 );
             }
             else // insert

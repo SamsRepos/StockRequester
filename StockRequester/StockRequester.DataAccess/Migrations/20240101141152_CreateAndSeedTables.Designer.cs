@@ -12,8 +12,8 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240101131626_AddingAndSeedingTables")]
-    partial class AddingAndSeedingTables
+    [Migration("20240101141152_CreateAndSeedTables")]
+    partial class CreateAndSeedTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
