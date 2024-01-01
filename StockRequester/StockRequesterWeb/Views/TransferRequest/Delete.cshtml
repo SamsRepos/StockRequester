@@ -1,5 +1,68 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Delete Transfer Request";
 }
+
+@model TransferRequest
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-primary py-2">Delete Transfer Request</h2>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <form method="post">
+                <input asp-for="Id" hidden />
+                <input asp-for="CompanyId" hidden />
+                <div class="border p-3 mt-4">
+
+                    <div class="mb-3 row p-1">
+                        <label asp-for="Item" class="p-0"></label>
+                        <input asp-for="Item" disabled class="form-control" />
+                    </div>
+
+                    <div class="mb-3 row p-1">
+                        <label asp-for="Quantity" class="p-0"></label>
+                        <input asp-for="Quantity" disabled type="text" class="form-control" />
+                    </div>
+
+                    <div class="mb-3 row p-1">
+                        <label class="p-0">Origin</label>
+                        <input asp-for="OriginLocation.Name" disabled type="text" class="form-control" />
+                    </div>
+                    <div class="mb-3 row p-1">
+                        <label class="p-0">Destination</label>
+                        <input asp-for="DestinationLocation.Name" disabled type="text" class="form-control" />
+                    </div>
+
+                    <div class="mb-3 row p-1">
+                        <label asp-for="Reason" class="p-0"></label>
+                        <input asp-for="Reason" disabled type="text" class="form-control" />
+                    </div>
+
+                    <div class="mb-3 row p-1">
+                        <label asp-for="MiscNotes" class="p-0"></label>
+                        <input asp-for="MiscNotes" disabled type="text" class="form-control" />
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-6 col-md-3">
+                            <button type="submit" class="btn btn-danger form-control">
+                                <i class="bi bi-trash3"></i> Delete Now
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <a asp-controller="Company" asp-action="Index" asp-route-companyId="@Model.CompanyId" class="btn btn-secondary border form-control">
+                                <i class="bi bi-arrow-left-circle"></i> Back to Company View
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

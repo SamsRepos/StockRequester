@@ -115,9 +115,48 @@ namespace StockRequesterWeb.Controllers
         }
 
 
-        public IActionResult Delete()
+        public IActionResult Delete(int? id)
         {
-            return View();
+            if (id is null || id == 0)
+            {
+                return NotFound();
+            }
+
+            TransferRequest? trFromDb = _unitOfWork.TransferRequest.Get(
+                (u => u.Id == id),
+                includeProperties: $"{nameof(TransferRequest.DestinationLocation)},{nameof(TransferRequest.OriginLocation)}"
+            );
+
+            if (trFromDb is null)
+            {
+                return NotFound();
+            }
+
+            return View(trFromDb);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int? id)
+        {
+            if (id is null || id == 0)
+            {
+                return NotFound();
+            }
+
+            TransferRequest? trFromDb = _unitOfWork.TransferRequest.Get(u => u.Id == id);
+
+            if (trFromDb is null)
+            {
+                return NotFound();
+            }
+
+            int companyId = trFromDb.CompanyId;
+
+            _unitOfWork.TransferRequest.Remove(trFromDb);
+            _unitOfWork.Save();
+            TempData["success"] = $"Transfer Request deleted successfully";
+
+            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = companyId });
         }
     }
 }

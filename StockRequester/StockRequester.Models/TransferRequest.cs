@@ -39,8 +39,6 @@ namespace StockRequester.Models
         [Range(1, 1000)]
         public int Quantity { get; set; }
         
-        [Required] public string Reason { get; set; }
-
 
         //
         // Destination Location (where the request comes from):
@@ -71,6 +69,8 @@ namespace StockRequester.Models
         //
         //
         //
+
+        [Required] public string Reason { get; set; }
 
         // status - requested, pending, sent, arrived/complete
         // estimated date - a response from origin

@@ -27,17 +27,11 @@
             <span asp-validation-for="TransferRequest.Quantity" class="text-danger"></span>
         </div>
 
-        <div class="mb-3 row p-1">
-            <label asp-for="TransferRequest.Reason" class="p-0"></label>
-            <input asp-for="TransferRequest.Reason" type="text" class="form-control" />
-            <span asp-validation-for="TransferRequest.Reason" class="text-danger"></span>
-        </div>
-
         <div class="form-floating py-2 col-12">
             <select asp-for="TransferRequest.OriginLocationId" asp-items="@Model.CompanyLocationsList" class="form-select border-0 shadow">
                 <option disabled selected>--Select Origin Location--</option>
             </select>
-            <label asp-for="TransferRequest.OriginLocationId" class="ms-2"></label>
+            <label asp-for="TransferRequest.OriginLocationId" class="ms-2 text-black"></label>
             <span asp-validation-for="TransferRequest.OriginLocationId" class="text-danger"></span>
         </div>
 
@@ -45,8 +39,14 @@
             <select asp-for="TransferRequest.DestinationLocationId" asp-items="@Model.CompanyLocationsList" class="form-select border-0 shadow">
                 <option disabled selected>--Select Destination Location--</option>
             </select>
-            <label asp-for="TransferRequest.DestinationLocationId" class="ms-2"></label>
+            <label asp-for="TransferRequest.DestinationLocationId" class="ms-2 text-black"></label>
             <span asp-validation-for="TransferRequest.DestinationLocationId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="TransferRequest.Reason" class="p-0"></label>
+            <input asp-for="TransferRequest.Reason" type="text" class="form-control" />
+            <span asp-validation-for="TransferRequest.Reason" class="text-danger"></span>
         </div>
 
         <div class="mb-3 row p-1">
