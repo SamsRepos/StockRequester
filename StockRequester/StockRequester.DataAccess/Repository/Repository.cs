@@ -14,7 +14,6 @@ namespace StockRequester.DataAccess.Repository
         {
             _db = db;
             dbSet = _db.Set<T>();
-            // will do something like _db.Locations.Include(u=>u.Company)
         }
 
         public void Add(T entity)
@@ -37,7 +36,6 @@ namespace StockRequester.DataAccess.Repository
             return query.FirstOrDefault();
         }
 
-        //Company,
         public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;

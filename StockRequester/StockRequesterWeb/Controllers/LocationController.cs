@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
+using StockRequester.Utility;
 
 namespace StockRequesterWeb.Controllers
 {
@@ -103,7 +104,7 @@ namespace StockRequesterWeb.Controllers
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{obj.Name}\" {(locationAlreadyExists ? "updated" : "created")} successfully";
 
-            return RedirectToAction(nameof(Index), new { companyId = obj.CompanyId } );
+            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = obj.CompanyId } );
         }
 
         public IActionResult Delete(int? id)
@@ -144,7 +145,7 @@ namespace StockRequesterWeb.Controllers
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{locationFromDb.Name}\" deleted successfully";
 
-            return RedirectToAction(nameof(Index), new { companyId = companyId });
+            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = companyId });
         }
 
     }

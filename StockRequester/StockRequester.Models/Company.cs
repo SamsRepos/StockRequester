@@ -15,6 +15,9 @@ namespace StockRequester.Models
 
         [ValidateNever]
         public ICollection<Location> Locations { get; set; }
+
+        [ValidateNever]
+        public ICollection<TransferRequest> TransferRequests { get; set; }
       
         // transfer requests, or, rather, transfer request ids
         // reason tags

@@ -8,7 +8,7 @@
     <div class="row pt-4">
         <div class="col-6">
             <h2 class="text-primary">
-                Companies List
+                Companies (Admin View)
             </h2>
         </div>
         <div class="col-6 text-end">
@@ -38,11 +38,11 @@
                 <td>
                     <div class="w-100 btn-group" role="group">
                         <a asp-controller="Companies" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
-                            <i class="bi bi-pencil"></i> Edit
+                            <i class="bi bi-pencil"></i> Rename
                         </a>
 
-                        <a asp-controller="Location" asp-action="Index" asp-route-companyId="@obj.Id" class="btn btn-secondary mx-2">
-                            <i class="bi bi-pin-map"></i> Locations
+                        <a asp-controller="Company" asp-action="Index" asp-route-companyId="@obj.Id" class="btn btn-secondary mx-2">
+                            <i class="bi bi-card-list"></i> Go To Company View
                         </a>
 
                         <a asp-controller="Companies" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2">

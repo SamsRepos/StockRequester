@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StockRequester.DataAccess\StockRequester.DataAccess.csproj" />
+    <ProjectReference Include="..\StockRequester.Utility\StockRequester.Utility.csproj" />
   </ItemGroup>
 
 </Project>

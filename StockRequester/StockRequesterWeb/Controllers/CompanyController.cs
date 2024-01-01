@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockRequester.DataAccess.Repository.IRepository;
+using StockRequester.Models;
 
 namespace StockRequesterWeb.Controllers
 {
@@ -14,17 +15,14 @@ namespace StockRequesterWeb.Controllers
 
         public IActionResult Index(int companyId)
         {
-            //List<TransferRequest> allTransferRequests = _unitOfWork.TransferRequest.GetAll(includeProperties: "Company").ToList();
-            //List<Location> companyLocationsList = allLocationsList.Where(u => u.CompanyId == companyId).ToList();
-            //return companyLocationsList;
+            Company obj = _unitOfWork.Company.Get(
+                (u=>u.Id == companyId),
+                includeProperties: "Locations"
+            );
 
-            //CompanyViewModel viewModel = new CompanyViewModel
-            //{
-            //    // Company = _unitOfWork.Company.Get(u => u.Id == companyId)
+            obj.TransferRequests = new List<TransferRequest>();
 
-            //};
-
-            return View();
+            return View(obj);
         }
     }
 }

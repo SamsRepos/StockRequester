@@ -20,20 +20,21 @@ namespace StockRequester.Models
         //[Required] public int Quantity { get; set; }
         //[Required] public string Reason { get; set; }
 
-        //public int LocationFromId { get; set; }
+        //public int? DestinationLocationId { get; set; }
 
         //[ValidateNever]
-        //[InverseProperty(nameof(Location.TransferRequestsFromHere))]
-        //[ForeignKey(nameof(LocationFromId))]
-        //public Location LocationFrom { get; set; }
+        //[InverseProperty(nameof(Location.TransferRequestsToThisDestination))]
+        //[ForeignKey(nameof(DestinationLocationId))]
+        //public Location DestinationLocation { get; set; }
 
-        //public int LocationToId { get; set; }
+        //public int? OriginLocationId { get; set; }
 
         //[ValidateNever]
-        //[InverseProperty(nameof(Location.TransferRequestsToHere))]
-        //[ForeignKey(nameof(LocationToId))]
-        //public Location LocationTo { get; set; }
+        //[InverseProperty(nameof(Location.TransferRequestsFromThisOrigin))]
+        //[ForeignKey(nameof(OriginLocationId))]
+        //public Location OriginLocation { get; set; }
 
+        //// non-nullable id for cascade delete
         //[Required] public int CompanyId { get; set; }
 
         //[ValidateNever]
