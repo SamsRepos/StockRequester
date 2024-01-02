@@ -18,7 +18,7 @@ namespace StockRequesterWeb.Areas.User.Controllers
         {
             Company obj = _unitOfWork.Company.Get(
                 u => u.Id == companyId,
-                includeProperties: $"{nameof(Company.TransferRequests)}, {nameof(Company.Locations)}"
+                includeProperties: $"{nameof(Company.TransferRequests)}, {nameof(Company.Locations)}, {nameof(Company.Users)}"
             );
 
             return View(obj);

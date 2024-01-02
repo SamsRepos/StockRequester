@@ -11,7 +11,7 @@ namespace StockRequester.DataAccess.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private ApplicationDbContext _db;
-        public ICompanyRepository Company {  get; private set; }
+        public ICompanyRepository Company { get; private set; }
         public ILocationRepository Location { get; private set; }
         public ITransferRequestRepository TransferRequest { get; private set; }
         public UnitOfWork(ApplicationDbContext db)

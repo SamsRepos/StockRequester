@@ -18,6 +18,9 @@ namespace StockRequester.Models
 
         [ValidateNever]
         public ICollection<TransferRequest> TransferRequests { get; set; }
+
+        [ValidateNever]
+        public ICollection<ApplicationUser> Users { get; set; }
       
         // reason tags
     }

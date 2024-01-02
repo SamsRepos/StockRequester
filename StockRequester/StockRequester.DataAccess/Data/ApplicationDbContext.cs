@@ -16,6 +16,7 @@ namespace StockRequester.DataAccess.Data
         public DbSet<Company> Companies { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<TransferRequest> TransferRequests { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

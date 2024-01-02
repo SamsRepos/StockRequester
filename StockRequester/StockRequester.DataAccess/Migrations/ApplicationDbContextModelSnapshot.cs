@@ -86,6 +86,11 @@ namespace StockRequester.DataAccess.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -137,6 +142,10 @@ namespace StockRequester.DataAccess.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -239,7 +248,7 @@ namespace StockRequester.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
 
                     b.HasData(
                         new
@@ -278,7 +287,7 @@ namespace StockRequester.DataAccess.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
 
                     b.HasData(
                         new
@@ -336,7 +345,7 @@ namespace StockRequester.DataAccess.Migrations
 
                     b.HasIndex("OriginLocationId");
 
-                    b.ToTable("TransferRequests");
+                    b.ToTable("TransferRequests", (string)null);
 
                     b.HasData(
                         new
@@ -349,6 +358,22 @@ namespace StockRequester.DataAccess.Migrations
                             Quantity = 10,
                             Reason = "Need more"
                         });
+                });
+
+            modelBuilder.Entity("StockRequester.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -438,6 +463,17 @@ namespace StockRequester.DataAccess.Migrations
                     b.Navigation("DestinationLocation");
 
                     b.Navigation("OriginLocation");
+                });
+
+            modelBuilder.Entity("StockRequester.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("StockRequester.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("StockRequester.Models.Company", b =>
