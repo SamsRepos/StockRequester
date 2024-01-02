@@ -14,14 +14,7 @@ namespace StockRequester.DataAccess.Repository
 
         public void Update(Location location)
         {
-            //_db.Locations.Update(location);
-
-            var objFromDb = _db.Locations.FirstOrDefault(u => u.Id == location.Id);
-            if (objFromDb is not null)
-            {
-                objFromDb.Name = location.Name;
-                objFromDb.CompanyId = location.CompanyId;
-            }
+            _db.Locations.Update(location);
         }
     }
 }

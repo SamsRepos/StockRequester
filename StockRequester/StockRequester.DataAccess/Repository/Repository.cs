@@ -22,7 +22,7 @@ namespace StockRequester.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool noTracking = false)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
@@ -34,7 +34,16 @@ namespace StockRequester.DataAccess.Repository
                     query = query.Include(includeProp.Trim()) ;
                 }
             }
-            return query.FirstOrDefault();
+
+            if(noTracking)
+            {
+                return query.AsNoTracking().FirstOrDefault();
+            }
+            else
+            {
+                return query.FirstOrDefault();
+            }
+
         }
 
         public IEnumerable<T> GetAll(string? includeProperties = null)

@@ -86,7 +86,8 @@ namespace StockRequesterWeb.Areas.User.Controllers
         {
             Company company = _unitOfWork.Company.Get(
                 u => u.Id == obj.CompanyId,
-                includeProperties: nameof(Company.Locations)
+                includeProperties: nameof(Company.Locations),
+                noTracking: true
             );
 
 
