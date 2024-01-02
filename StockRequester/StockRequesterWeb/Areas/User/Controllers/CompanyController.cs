@@ -2,8 +2,9 @@
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 
-namespace StockRequesterWeb.Controllers
+namespace StockRequesterWeb.Areas.User.Controllers
 {
+    [Area(nameof(User))]
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -16,7 +17,7 @@ namespace StockRequesterWeb.Controllers
         public IActionResult Index(int companyId)
         {
             Company obj = _unitOfWork.Company.Get(
-                (u=>u.Id == companyId),
+                u => u.Id == companyId,
                 includeProperties: $"{nameof(Company.TransferRequests)}, {nameof(Company.Locations)}"
             );
 

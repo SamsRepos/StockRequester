@@ -6,8 +6,9 @@ using StockRequester.Models.ViewModels;
 using StockRequester.Utility;
 using System.Transactions;
 
-namespace StockRequesterWeb.Controllers
+namespace StockRequesterWeb.Areas.User.Controllers
 {
+    [Area(nameof(User))]
     public class TransferRequestController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -35,7 +36,7 @@ namespace StockRequesterWeb.Controllers
             }
 
             Company companyFromDb = _unitOfWork.Company.Get(
-                (u => u.Id == companyId),
+                u => u.Id == companyId,
                 includeProperties: nameof(Company.Locations)
             );
 
@@ -44,7 +45,7 @@ namespace StockRequesterWeb.Controllers
             if (locationAlreadyExists) // update
             {
                 tr = _unitOfWork.TransferRequest.Get(
-                    (u => u.Id == id),
+                    u => u.Id == id,
                     includeProperties: $"{nameof(TransferRequest.Company)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)}"
                 );
             }
@@ -56,12 +57,12 @@ namespace StockRequesterWeb.Controllers
                 tr.Company = companyFromDb;
             }
 
-            if(originLocationId is not null && originLocationId != 0)
+            if (originLocationId is not null && originLocationId != 0)
             {
                 tr.OriginLocationId = originLocationId;
             }
 
-            if(destinationLocationId is not null && destinationLocationId != 0)
+            if (destinationLocationId is not null && destinationLocationId != 0)
             {
                 tr.DestinationLocationId = destinationLocationId;
             }
@@ -78,7 +79,7 @@ namespace StockRequesterWeb.Controllers
             {
                 TransferRequest = tr,
                 CompanyLocationsList = companyLocationsList,
-                BackLocation = backLocationId is not null ? _unitOfWork.Location.Get(u=>u.Id==backLocationId) : null
+                BackLocation = backLocationId is not null ? _unitOfWork.Location.Get(u => u.Id == backLocationId) : null
             };
 
             return View(trVm);
@@ -90,7 +91,7 @@ namespace StockRequesterWeb.Controllers
             TransferRequest obj = trVm.TransferRequest;
 
             Company companyFromDb = _unitOfWork.Company.Get(
-                (u => u.Id == obj.CompanyId),
+                u => u.Id == obj.CompanyId,
                 includeProperties: nameof(Company.Locations)
             );
 
@@ -134,7 +135,7 @@ namespace StockRequesterWeb.Controllers
             }
 
             TransferRequest? trFromDb = _unitOfWork.TransferRequest.Get(
-                (u => u.Id == id),
+                u => u.Id == id,
                 includeProperties: $"{nameof(TransferRequest.DestinationLocation)},{nameof(TransferRequest.OriginLocation)}"
             );
 
@@ -167,7 +168,7 @@ namespace StockRequesterWeb.Controllers
             _unitOfWork.Save();
             TempData["success"] = $"Transfer Request deleted successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = companyId });
+            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId });
         }
     }
 }

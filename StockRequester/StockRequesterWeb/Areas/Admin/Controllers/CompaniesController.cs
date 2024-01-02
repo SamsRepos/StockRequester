@@ -3,8 +3,9 @@ using StockRequester.DataAccess.Data;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 
-namespace StockRequesterWeb.Controllers
+namespace StockRequesterWeb.Areas.Admin.Controllers
 {
+    [Area(nameof(Admin))]
     public class CompaniesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -27,8 +28,8 @@ namespace StockRequesterWeb.Controllers
         [HttpPost]
         public IActionResult Create(Company obj)
         {
-            if(obj.Name is not null &&
-              (_unitOfWork.Company.Get(u => u.Name.ToLower() == obj.Name.ToLower()) is not null))
+            if (obj.Name is not null &&
+              _unitOfWork.Company.Get(u => u.Name.ToLower() == obj.Name.ToLower()) is not null)
             //(_db.Companies.FirstOrDefault(u => u.Name.ToLower() == obj.Name.ToLower()) is not null))
             {
                 ModelState.AddModelError(
@@ -37,7 +38,7 @@ namespace StockRequesterWeb.Controllers
                 );
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
@@ -50,13 +51,13 @@ namespace StockRequesterWeb.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if(id is null || id == 0)
+            if (id is null || id == 0)
             {
                 return NotFound();
             }
 
-            Company? companyFromDb = _unitOfWork.Company.Get(u=>u.Id == id);
-            if(companyFromDb is null)
+            Company? companyFromDb = _unitOfWork.Company.Get(u => u.Id == id);
+            if (companyFromDb is null)
             {
                 return NotFound();
             }

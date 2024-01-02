@@ -3,8 +3,9 @@ using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 using StockRequester.Utility;
 
-namespace StockRequesterWeb.Controllers
+namespace StockRequesterWeb.Areas.User.Controllers
 {
+    [Area(nameof(User))]
     public class LocationController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -17,7 +18,7 @@ namespace StockRequesterWeb.Controllers
         public IActionResult Index(int id)
         {
             Location? locationFromDb = _unitOfWork.Location.Get(
-                (u => u.Id == id),
+                u => u.Id == id,
                 includeProperties: $"{nameof(Location.TransferRequestsFromThisOrigin)},{nameof(Location.TransferRequestsToThisDestination)}"
             );
 
@@ -26,9 +27,9 @@ namespace StockRequesterWeb.Controllers
                 return NotFound();
             }
 
-            foreach(TransferRequest tc in locationFromDb.TransferRequestsFromThisOrigin)
+            foreach (TransferRequest tc in locationFromDb.TransferRequestsFromThisOrigin)
             {
-                tc.OriginLocation      = _unitOfWork.Location.Get(u => u.Id == tc.OriginLocationId);
+                tc.OriginLocation = _unitOfWork.Location.Get(u => u.Id == tc.OriginLocationId);
                 tc.DestinationLocation = _unitOfWork.Location.Get(u => u.Id == tc.DestinationLocationId);
             }
 
@@ -43,7 +44,7 @@ namespace StockRequesterWeb.Controllers
 
         public IActionResult Upsert(int companyId, int? id)
         {
-            if(companyId == 0)
+            if (companyId == 0)
             {
                 string errorMessage = "No company ID for Upsert action";
                 ModelState.AddModelError(
@@ -53,17 +54,17 @@ namespace StockRequesterWeb.Controllers
                 TempData["error"] = errorMessage;
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
 
             Location location;
             bool locationAlreadyExists = !(id is null || id == 0);
-            if(locationAlreadyExists) // update
+            if (locationAlreadyExists) // update
             {
                 location = _unitOfWork.Location.Get(
-                    (u => u.Id == id),
+                    u => u.Id == id,
                     includeProperties: nameof(Location.Company)
                 );
             }
@@ -76,7 +77,7 @@ namespace StockRequesterWeb.Controllers
                 location.Company = companyFromDb;
 
             }
-            
+
             return View(location);
         }
 
@@ -84,10 +85,10 @@ namespace StockRequesterWeb.Controllers
         public IActionResult Upsert(Location obj)
         {
             Company company = _unitOfWork.Company.Get(
-                (u => u.Id == obj.CompanyId),
+                u => u.Id == obj.CompanyId,
                 includeProperties: nameof(Company.Locations)
             );
-            
+
 
             Location? anyOtherWithSameName = company.Locations.ToList().Find(location => location.Name.ToLower() == obj.Name.ToLower());
             if (
@@ -110,7 +111,7 @@ namespace StockRequesterWeb.Controllers
 
             bool locationAlreadyExists = !(obj.Id == 0);
 
-            if(locationAlreadyExists)
+            if (locationAlreadyExists)
             {
                 _unitOfWork.Location.Update(obj);
             }
@@ -121,7 +122,7 @@ namespace StockRequesterWeb.Controllers
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{obj.Name}\" {(locationAlreadyExists ? "updated" : "created")} successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = obj.CompanyId } );
+            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = obj.CompanyId });
         }
 
         public IActionResult Delete(int? id)
@@ -132,7 +133,7 @@ namespace StockRequesterWeb.Controllers
             }
 
             Location? locationFromDb = _unitOfWork.Location.Get(
-                (u => u.Id == id),
+                u => u.Id == id,
                 includeProperties: $"{nameof(Location.TransferRequestsFromThisOrigin)},{nameof(Location.TransferRequestsToThisDestination)}"
             );
 
@@ -160,12 +161,12 @@ namespace StockRequesterWeb.Controllers
             }
 
             int companyId = locationFromDb.CompanyId;
-            
+
             _unitOfWork.Location.Remove(locationFromDb);
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{locationFromDb.Name}\" deleted successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = companyId });
+            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId });
         }
 
     }
