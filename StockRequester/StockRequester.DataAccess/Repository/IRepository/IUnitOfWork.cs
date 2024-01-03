@@ -11,6 +11,7 @@ namespace StockRequester.DataAccess.Repository.IRepository
         ICompanyRepository Company {  get; }
         ILocationRepository Location { get; }
         ITransferRequestRepository TransferRequest { get; }
+        IApplicationUserRepository ApplicationUser { get; }
         public void Save();
     }
 }

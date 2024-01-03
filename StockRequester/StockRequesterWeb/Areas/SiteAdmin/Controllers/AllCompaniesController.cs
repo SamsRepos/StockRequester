@@ -9,10 +9,10 @@ namespace StockRequesterWeb.Areas.SiteAdmin.Controllers
 {
     [Area(nameof(SiteAdmin))]
     [Authorize(Roles = SD.Role_SiteAdmin)]
-    public class CompaniesController : Controller
+    public class AllCompaniesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CompaniesController(IUnitOfWork unitOfWork)
+        public AllCompaniesController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -31,15 +31,15 @@ namespace StockRequesterWeb.Areas.SiteAdmin.Controllers
         [HttpPost]
         public IActionResult Create(Company obj)
         {
-            if (obj.Name is not null &&
-              _unitOfWork.Company.Get(u => u.Name.ToLower() == obj.Name.ToLower()) is not null)
-            //(_db.Companies.FirstOrDefault(u => u.Name.ToLower() == obj.Name.ToLower()) is not null))
-            {
-                ModelState.AddModelError(
-                    "name",
-                    $"Unfortunately, the company name \"{obj.Name}\"already exists on our system"
-                );
-            }
+            //if (obj.Name is not null &&
+            //  _unitOfWork.Company.Get(u => u.Name.ToLower() == obj.Name.ToLower()) is not null)
+            ////(_db.Companies.FirstOrDefault(u => u.Name.ToLower() == obj.Name.ToLower()) is not null))
+            //{
+            //    ModelState.AddModelError(
+            //        "name",
+            //        $"Unfortunately, the company name \"{obj.Name}\"already exists on our system"
+            //    );
+            //}
 
             if (!ModelState.IsValid)
             {

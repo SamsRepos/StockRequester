@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StockRequester.DataAccess.Repository.IRepository;
@@ -24,8 +25,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
         public IActionResult Index()
         {
-            IdentityUser? userAsIdentityUser = _userManager.GetUserAsync(HttpContext.User).GetAwaiter().GetResult();
-            ApplicationUser? user = (ApplicationUser)userAsIdentityUser;
+            ApplicationUser? user = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
             if (user is null)
             {
                 //Response.StatusCode = 404;
@@ -57,6 +57,47 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         public IActionResult RegisterCompany()
         {
             return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_CompanyAdmin)]
+        public IActionResult RegisterCompany(Company obj)
+        {
+            //if (obj.Name is not null &&
+            //  _unitOfWork.Company.Get(u => u.Name.ToLower() == obj.Name.ToLower()) is not null)
+            //{
+            //    ModelState.AddModelError(
+            //        "name",
+            //        $"Unfortunately, the company name \"{obj.Name}\"already exists on our system"
+            //    );
+            //}
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            _unitOfWork.Company.Add(obj);
+            _unitOfWork.Save();
+
+            ApplicationUser? user = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            //IdentityUser? user = _userManager.GetUserAsync(HttpContext.User).GetAwaiter().GetResult();
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            if(obj.Id != 0)
+            {
+                user.CompanyId = obj.Id;
+                _unitOfWork.ApplicationUser.Update(user);
+                _unitOfWork.Save();
+            }
+
+            TempData["success"] = $"Company \"{obj.Name}\" created successfully";
+            return RedirectToAction(nameof(Index));
+
         }
 
         [Authorize(Roles = SD.Role_CompanyUser)]

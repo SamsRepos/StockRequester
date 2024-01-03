@@ -25,8 +25,8 @@ namespace StockRequesterWeb.Areas.Home.Controllers
             if (User.IsInRole(SD.Role_SiteAdmin))
             {
                 return RedirectToAction(
-                    nameof(CompaniesController.Index), 
-                    nameof(CompaniesController),
+                    nameof(AllCompaniesController.Index), 
+                    nameof(AllCompaniesController),
                     new { area = nameof(SiteAdmin) }
                 );
             }
