@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
+using StockRequester.Models.ViewModels;
 using StockRequester.Utility;
 using StockRequesterWeb.Areas.SiteAdmin.Controllers;
 
@@ -103,7 +105,45 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         [Authorize(Roles = SD.Role_CompanyUser)]
         public IActionResult JoinCompany()
         {
-            return View();
+            SelectCompanyViewModel vm = new SelectCompanyViewModel();
+
+            vm.CompaniesList = _unitOfWork.Company.GetAll().Select(
+                u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }
+            );
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_CompanyUser)]
+        public IActionResult JoinCompany(SelectCompanyViewModel vm)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            ApplicationUser? user = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            if (vm.CompanyId != 0)
+            {
+                user.CompanyId = vm.CompanyId;
+                _unitOfWork.ApplicationUser.Update(user);
+                _unitOfWork.Save();
+            }
+
+            TempData["success"] = $"Joined company successfully";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -116,13 +116,6 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
             public string? Name { get; set; }
 
             //
-            // Company:
-            //
-
-            //[Required(ErrorMessage = "Comapny is required")] public int CompanyId { get; set; }
-            //[ValidateNever] public IEnumerable<SelectListItem> CompaniesList { get; set; }
-
-            //
             // Roles:
             //
 
@@ -163,14 +156,6 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
                 //    }
                 //),
 
-                //CompaniesList = _unitOfWork.Company.GetAll().Select(
-                //    u => new SelectListItem
-                //    {
-                //        Text  = u.Name,
-                //        Value = u.Id.ToString()
-                //    }
-                //)
-                //};
             };
         
             ReturnUrl = returnUrl;
