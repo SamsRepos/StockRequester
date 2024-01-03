@@ -22,15 +22,24 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="CompanyUser" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="Home" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="CompanyUser" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="Home" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Home" asp-controller="Home" asp-action="Donate">Donate</a>
                         </li>
                         @if(User.IsInRole(SD.Role_SiteAdmin))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="SiteAdmin" asp-controller="Companies" asp-action="Index">Companies (Admin View)</a>
+                            </li>
+                        }
+                        @if (User.IsInRole(SD.Role_CompanyUser) || User.IsInRole(SD.Role_CompanyAdmin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="CompanyUser" asp-controller="Company" asp-action="Index">Company View</a>
                             </li>
                         }
                     </ul>

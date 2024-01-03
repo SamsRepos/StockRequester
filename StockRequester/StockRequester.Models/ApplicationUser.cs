@@ -18,7 +18,7 @@ namespace StockRequester.Models
         // COMPANY:
         //
 
-        [Required] public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         [ValidateNever]
         [ForeignKey(nameof(CompanyId))]

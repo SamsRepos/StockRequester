@@ -51,6 +51,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseStatusCodePagesWithRedirects("/Views/Errors/{0}");
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -59,6 +61,6 @@ app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{area=CompanyUser}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Home}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

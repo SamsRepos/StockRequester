@@ -110,21 +110,24 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            
+            [Required]
+            [Display(Name =  "User profile name")]
+            public string? Name { get; set; }
+
             //
-            // ApplicationUser specific fields:
+            // Company:
             //
 
-            [Required] public string? Name { get; set; }
-
-            [Required(ErrorMessage = "Comapny is required")] public int CompanyId { get; set; }
-            [ValidateNever] public IEnumerable<SelectListItem> CompaniesList { get; set; }
+            //[Required(ErrorMessage = "Comapny is required")] public int CompanyId { get; set; }
+            //[ValidateNever] public IEnumerable<SelectListItem> CompaniesList { get; set; }
 
             //
             // Roles:
             //
 
-            public string? Role { get; set; }
-            [ValidateNever] public IEnumerable<SelectListItem> RoleList {  get; set; }           
+            [Required(ErrorMessage = "Please select an option")] public string? Role { get; set; }
+            [ValidateNever] public IEnumerable<SelectListItem> RegisterRoleTextList {  get; set; }           
             
         }
 
@@ -140,23 +143,36 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
 
             Input = new()
             {
-                RoleList = _roleManager.Roles.Select(x => x.Name).Select(
-                    i => new SelectListItem
-                    {
-                        Text  = i,
-                        Value = i
+                RegisterRoleTextList = new List<SelectListItem>()
+                {
+                    new SelectListItem(){
+                        Text  = SD.RegisterRoleText_CompanyUser,
+                        Value = SD.Role_CompanyUser
+                    },
+                    new SelectListItem(){
+                        Text  = SD.RegisterRoleText_CompanyAdmin,
+                        Value = SD.Role_CompanyAdmin
                     }
-                ),
+                }
 
-                CompaniesList = _unitOfWork.Company.GetAll().Select(
-                    u => new SelectListItem
-                    {
-                        Text  = u.Name,
-                        Value = u.Id.ToString()
-                    }
-                )
+                //RoleList = _roleManager.Roles.Select(x => x.Name).Select(
+                //    i => new SelectListItem
+                //    {
+                //        Text  = i,
+                //        Value = i
+                //    }
+                //),
+
+                //CompaniesList = _unitOfWork.Company.GetAll().Select(
+                //    u => new SelectListItem
+                //    {
+                //        Text  = u.Name,
+                //        Value = u.Id.ToString()
+                //    }
+                //)
+                //};
             };
-
+        
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -173,7 +189,6 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 user.Name      = Input.Name;
-                user.CompanyId = Input.CompanyId;
                 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
