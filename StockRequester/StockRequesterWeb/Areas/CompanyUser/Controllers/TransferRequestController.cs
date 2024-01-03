@@ -6,9 +6,9 @@ using StockRequester.Models.ViewModels;
 using StockRequester.Utility;
 using System.Transactions;
 
-namespace StockRequesterWeb.Areas.User.Controllers
+namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
-    [Area(nameof(User))]
+    [Area(nameof(CompanyUser))]
     public class TransferRequestController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -2,10 +2,11 @@
 using StockRequester.DataAccess.Data;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
+using StockRequester.Utility;
 
-namespace StockRequesterWeb.Areas.Admin.Controllers
+namespace StockRequesterWeb.Areas.SiteAdmin.Controllers
 {
-    [Area(nameof(Admin))]
+    [Area(nameof(SiteAdmin))]
     public class CompaniesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

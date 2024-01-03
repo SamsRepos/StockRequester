@@ -23,12 +23,14 @@ using Microsoft.Extensions.Logging;
 using StockRequester.DataAccess.Repository;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
+using StockRequester.Utility;
 
 namespace StockRequesterWeb.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
@@ -38,6 +40,7 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
@@ -45,8 +48,9 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
             IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
-            _userStore = userStore;
-            _emailStore = GetEmailStore();
+            _roleManager = roleManager;
+            _userStore   = userStore;
+            _emailStore  = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
@@ -116,6 +120,13 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if(!_roleManager.RoleExistsAsync(SD.Role_SiteAdmin).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_SiteAdmin)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_CompanyAdmin)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_CompanyUser)).GetAwaiter().GetResult();
+            }
+
             Input = new()
             {
                 CompaniesList = _unitOfWork.Company.GetAll().Select(

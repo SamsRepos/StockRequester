@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using StockRequester.Models;
 using System.Diagnostics;
 
-namespace StockRequesterWeb.Areas.User.Controllers
+namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
-    [Area(nameof(User))]
+    [Area(nameof(CompanyUser))]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

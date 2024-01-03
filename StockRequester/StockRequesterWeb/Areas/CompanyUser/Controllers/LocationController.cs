@@ -3,9 +3,9 @@ using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 using StockRequester.Utility;
 
-namespace StockRequesterWeb.Areas.User.Controllers
+namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
-    [Area(nameof(User))]
+    [Area(nameof(CompanyUser))]
     public class LocationController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

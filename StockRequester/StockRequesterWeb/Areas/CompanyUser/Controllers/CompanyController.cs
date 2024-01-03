@@ -2,9 +2,9 @@
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 
-namespace StockRequesterWeb.Areas.User.Controllers
+namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
-    [Area(nameof(User))]
+    [Area(nameof(CompanyUser))]
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
