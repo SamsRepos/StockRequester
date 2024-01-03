@@ -110,11 +110,22 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            //
             // ApplicationUser specific fields:
+            //
+
             [Required] public string? Name { get; set; }
 
             [Required(ErrorMessage = "Comapny is required")] public int CompanyId { get; set; }
             [ValidateNever] public IEnumerable<SelectListItem> CompaniesList { get; set; }
+
+            //
+            // Roles:
+            //
+
+            public string? Role { get; set; }
+            [ValidateNever] public IEnumerable<SelectListItem> RoleList {  get; set; }           
+            
         }
 
 
@@ -129,10 +140,18 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
 
             Input = new()
             {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(
+                    i => new SelectListItem
+                    {
+                        Text  = i,
+                        Value = i
+                    }
+                ),
+
                 CompaniesList = _unitOfWork.Company.GetAll().Select(
                     u => new SelectListItem
                     {
-                        Text = u.Name,
+                        Text  = u.Name,
                         Value = u.Id.ToString()
                     }
                 )
@@ -161,6 +180,15 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    if (!string.IsNullOrEmpty(Input.Role))
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.Role);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.Role_CompanyUser);
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

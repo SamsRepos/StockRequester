@@ -20,7 +20,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 // AddDefaultIdentity() doesn't expect a role:
 //builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 // AddIdentity() expects a role:
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(
+    options =>
+    {
+        options.LoginPath        = $"/Identity/Account/Login";
+        options.LogoutPath       = $"/Identity/Account/Logout";
+        options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+    }
+);
 
 builder.Services.AddRazorPages();
 
