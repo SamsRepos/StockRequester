@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
@@ -8,6 +9,7 @@ using System.Transactions;
 
 namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
+    [Authorize]
     [Area(nameof(CompanyUser))]
     public class TransferRequestController : Controller
     {

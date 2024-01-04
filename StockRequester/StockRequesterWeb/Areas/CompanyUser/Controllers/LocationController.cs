@@ -1,18 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 using StockRequester.Utility;
+using System.ComponentModel.Design;
 
 namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
+    [Authorize]
     [Area(nameof(CompanyUser))]
     public class LocationController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public LocationController(IUnitOfWork unitOfWork)
+        public LocationController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork  = unitOfWork;
+            _userManager = userManager;
         }
 
         public IActionResult Index(int id)
@@ -25,6 +32,14 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             if (locationFromDb is null)
             {
                 return NotFound();
+            }
+
+            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            if(!(IdentityUtility.UserHasAccess(applicationUser, locationFromDb)) &&
+               !(User.IsInRole(SD.Role_SiteAdmin))
+            )
+            {
+                return RedirectToPage($"/Identity/Account/AccessDenied");
             }
 
             foreach (TransferRequest tc in locationFromDb.TransferRequestsFromThisOrigin)
@@ -42,9 +57,13 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             return View(locationFromDb);
         }
 
-        public IActionResult Upsert(int companyId, int? id)
+        public IActionResult Upsert(int? id)
         {
-            if (companyId == 0)
+            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            if (applicationUser is null) return NotFound();
+            
+            int? companyId = applicationUser.CompanyId;
+            if (companyId is null || companyId == 0)
             {
                 string errorMessage = "No company ID for Upsert action";
                 ModelState.AddModelError(
@@ -67,11 +86,18 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                     u => u.Id == id,
                     includeProperties: nameof(Location.Company)
                 );
+
+                if(!(IdentityUtility.UserHasAccess(applicationUser, location)) &&
+                   !(User.IsInRole(SD.Role_SiteAdmin))
+                )
+                {
+                    return RedirectToPage($"/Identity/Account/AccessDenied");
+                }
             }
             else // insert
             {
                 location = new Location();
-                location.CompanyId = companyId;
+                location.CompanyId = (int)companyId;
 
                 Company companyFromDb = _unitOfWork.Company.Get(u => u.Id == companyId);
                 location.Company = companyFromDb;
@@ -89,7 +115,6 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 includeProperties: nameof(Company.Locations),
                 noTracking: true
             );
-
 
             Location? anyOtherWithSameName = company.Locations.ToList().Find(location => location.Name.ToLower() == obj.Name.ToLower());
             if (
@@ -123,7 +148,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{obj.Name}\" {(locationAlreadyExists ? "updated" : "created")} successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = obj.CompanyId });
+            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
 
         public IActionResult Delete(int? id)
@@ -141,6 +166,14 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             if (locationFromDb is null)
             {
                 return NotFound();
+            }
+
+            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            if (!(IdentityUtility.UserHasAccess(applicationUser, locationFromDb)) &&
+               !(User.IsInRole(SD.Role_SiteAdmin))
+            )
+            {
+                return RedirectToPage($"/Identity/Account/AccessDenied");
             }
 
             return View(locationFromDb);
@@ -161,13 +194,21 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
+            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            if (!(IdentityUtility.UserHasAccess(applicationUser, locationFromDb)) &&
+                !(User.IsInRole(SD.Role_SiteAdmin))
+            )
+            {
+                return RedirectToPage($"/Identity/Account/AccessDenied");
+            }
+
             int companyId = locationFromDb.CompanyId;
 
             _unitOfWork.Location.Remove(locationFromDb);
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{locationFromDb.Name}\" deleted successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId });
+            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
 
     }
