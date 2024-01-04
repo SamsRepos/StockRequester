@@ -52,6 +52,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             return View(locationFromDb);
         }
 
+        [Authorize(Roles = SD.Role_CompanyAdmin)]
         public IActionResult Upsert(int? id)
         {
             int? companyId = CurrentUserCompanyId();
@@ -97,6 +98,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             return View(location);
         }
 
+        [Authorize(Roles = SD.Role_CompanyAdmin)]
         [HttpPost]
         public IActionResult Upsert(Location obj)
         {
@@ -142,6 +144,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
 
+        [Authorize(Roles = SD.Role_CompanyAdmin)]
         public IActionResult Delete(int? id)
         {
             if (id is null || id == 0)
@@ -167,6 +170,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             return View(locationFromDb);
         }
 
+        [Authorize(Roles = SD.Role_CompanyAdmin)]
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {

@@ -135,7 +135,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
 
-
+        [Authorize(Roles = SD.Role_CompanyAdmin)]
         public IActionResult Delete(int? id)
         {
             if (id is null || id == 0)
@@ -161,6 +161,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             return View(trFromDb);
         }
 
+        [Authorize(Roles = SD.Role_CompanyAdmin)]
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
