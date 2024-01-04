@@ -42,6 +42,12 @@
                                 <a class="nav-link" asp-area="CompanyUser" asp-controller="Company" asp-action="Index">Company View</a>
                             </li>
                         }
+                        @if (User.IsInRole(SD.Role_CompanyAdmin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="CompanyAdmin" asp-controller="CompanyUsers" asp-action="Index">Company Users</a>
+                            </li>
+                        }
                     </ul>
 
                     <partial name="_LoginPartial" />

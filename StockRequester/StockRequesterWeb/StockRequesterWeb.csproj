@@ -33,8 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\CompanyAdmin\Controllers\" />
-    <Folder Include="Areas\CompanyAdmin\Views\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
 

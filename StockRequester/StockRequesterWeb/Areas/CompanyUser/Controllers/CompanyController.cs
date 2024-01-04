@@ -12,8 +12,8 @@ using StockRequesterWeb.Areas.SiteAdmin.Controllers;
 
 namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
-    [Authorize]
     [Area(nameof(CompanyUser))]
+    [Authorize]
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

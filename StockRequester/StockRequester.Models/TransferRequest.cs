@@ -73,8 +73,10 @@ namespace StockRequester.Models
         [Required] public string Reason { get; set; }
         //[Required] public public ICollection<ReasonTag> Reason { get; set; } with blob string and blob functions
 
-        // status - requested, pending, sent, arrived/complete
+        // created by
+        // status - requested, pending, sent, fulfilled, cancelled with reason 
         // estimated date - a response from origin
+        // delivery tracking info
 
         [DisplayName("Miscellaneous Notes")]
         public string? MiscNotes { get; set; }
