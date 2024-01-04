@@ -5,21 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 using StockRequester.Utility;
+using StockRequesterWeb.Controllers;
 using System.ComponentModel.Design;
 
 namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
     [Authorize]
     [Area(nameof(CompanyUser))]
-    public class LocationController : Controller
+    public class LocationController : StockRequesterBaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<IdentityUser> _userManager;
 
         public LocationController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+            : base(unitOfWork, userManager)
         {
-            _unitOfWork  = unitOfWork;
-            _userManager = userManager;
         }
 
         public IActionResult Index(int id)
@@ -34,10 +32,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
-            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if(!(IdentityUtility.UserHasAccess(applicationUser, locationFromDb)) &&
-               !(User.IsInRole(SD.Role_SiteAdmin))
-            )
+            if(!CurrentUserHasAccess(locationFromDb))
             {
                 return RedirectToPage($"/Identity/Account/AccessDenied");
             }
@@ -59,10 +54,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
         public IActionResult Upsert(int? id)
         {
-            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if (applicationUser is null) return NotFound();
-            
-            int? companyId = applicationUser.CompanyId;
+            int? companyId = CurrentUserCompanyId();
             if (companyId is null || companyId == 0)
             {
                 string errorMessage = "No company ID for Upsert action";
@@ -87,9 +79,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                     includeProperties: nameof(Location.Company)
                 );
 
-                if(!(IdentityUtility.UserHasAccess(applicationUser, location)) &&
-                   !(User.IsInRole(SD.Role_SiteAdmin))
-                )
+                if (!CurrentUserHasAccess(location))
                 {
                     return RedirectToPage($"/Identity/Account/AccessDenied");
                 }
@@ -111,7 +101,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         public IActionResult Upsert(Location obj)
         {
             Company company = _unitOfWork.Company.Get(
-                u => u.Id == obj.CompanyId,
+                u => u.Id == CurrentUserCompanyId(),
                 includeProperties: nameof(Company.Locations),
                 noTracking: true
             );
@@ -139,6 +129,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
             if (locationAlreadyExists)
             {
+                if (!CurrentUserHasAccess(obj)) return RedirectToPage($"/Identity/Account/AccessDenied");
                 _unitOfWork.Location.Update(obj);
             }
             else
@@ -168,10 +159,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
-            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if (!(IdentityUtility.UserHasAccess(applicationUser, locationFromDb)) &&
-               !(User.IsInRole(SD.Role_SiteAdmin))
-            )
+            if (!CurrentUserHasAccess(locationFromDb))
             {
                 return RedirectToPage($"/Identity/Account/AccessDenied");
             }
@@ -194,10 +182,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
-            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if (!(IdentityUtility.UserHasAccess(applicationUser, locationFromDb)) &&
-                !(User.IsInRole(SD.Role_SiteAdmin))
-            )
+            if (!CurrentUserHasAccess(locationFromDb))
             {
                 return RedirectToPage($"/Identity/Account/AccessDenied");
             }

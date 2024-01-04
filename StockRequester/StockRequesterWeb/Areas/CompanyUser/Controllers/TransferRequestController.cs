@@ -6,29 +6,23 @@ using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 using StockRequester.Models.ViewModels;
 using StockRequester.Utility;
+using StockRequesterWeb.Controllers;
 using System.Transactions;
 
 namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
     [Authorize]
     [Area(nameof(CompanyUser))]
-    public class TransferRequestController : Controller
+    public class TransferRequestController : StockRequesterBaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<IdentityUser> _userManager;
-
         public TransferRequestController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+            : base(unitOfWork, userManager)
         {
-            _unitOfWork = unitOfWork;
-            _userManager = userManager;
         }
 
         public IActionResult Upsert(int? id, int? originLocationId, int? destinationLocationId, int? backLocationId)
         {
-            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if (applicationUser is null) return NotFound();            
-
-            int? companyId = applicationUser.CompanyId;
+            int? companyId = CurrentUserCompanyId();
             if (companyId is null || companyId == 0)
             {
                 string errorMessage = "No company ID for Upsert action";
@@ -58,9 +52,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                     includeProperties: $"{nameof(TransferRequest.Company)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)}"
                 );
 
-                if (!(IdentityUtility.UserHasAccess(applicationUser, tr)) &&
-                   !(User.IsInRole(SD.Role_SiteAdmin))
-                )
+                if(!CurrentUserHasAccess(tr))
                 {
                     return RedirectToPage($"/Identity/Account/AccessDenied");
                 }
@@ -104,16 +96,16 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         [HttpPost]
         public IActionResult Upsert(TransferRequestViewModel trVm)
         {
-            TransferRequest obj = trVm.TransferRequest;
-
-            Company companyFromDb = _unitOfWork.Company.Get(
-                u => u.Id == obj.CompanyId,
-                includeProperties: nameof(Company.Locations)
-            );
+            TransferRequest tr = trVm.TransferRequest;
 
             if (!ModelState.IsValid)
             {
                 TempData["error"] = $"ModelState is not valid";
+
+                Company companyFromDb = _unitOfWork.Company.Get(
+                    u => u.Id == CurrentUserCompanyId(),
+                    includeProperties: nameof(Company.Locations)
+                );
 
                 trVm.CompanyLocationsList = companyFromDb.Locations.Select(
                     u => new SelectListItem
@@ -126,15 +118,16 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return View(trVm);
             }
 
-            bool trAlreadyExists = !(obj.Id == 0);
+            bool trAlreadyExists = !(tr.Id == 0);
 
             if (trAlreadyExists)
             {
-                _unitOfWork.TransferRequest.Update(obj);
+                if (!CurrentUserHasAccess(tr)) return RedirectToPage($"/Identity/Account/AccessDenied");
+                _unitOfWork.TransferRequest.Update(tr);
             }
             else
             {
-                _unitOfWork.TransferRequest.Add(obj);
+                _unitOfWork.TransferRequest.Add(tr);
             }
             _unitOfWork.Save();
             TempData["success"] = $"Transfer request {(trAlreadyExists ? "updated" : "created")} successfully";
@@ -160,10 +153,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
-            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if (!(IdentityUtility.UserHasAccess(applicationUser, trFromDb)) &&
-                !(User.IsInRole(SD.Role_SiteAdmin))
-            )
+            if (!CurrentUserHasAccess(trFromDb))
             {
                 return RedirectToPage($"/Identity/Account/AccessDenied");
             }
@@ -186,10 +176,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
-            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if (!(IdentityUtility.UserHasAccess(applicationUser, trFromDb)) &&
-                !(User.IsInRole(SD.Role_SiteAdmin))
-            )
+            if (!CurrentUserHasAccess(trFromDb))
             {
                 return RedirectToPage($"/Identity/Account/AccessDenied");
             }

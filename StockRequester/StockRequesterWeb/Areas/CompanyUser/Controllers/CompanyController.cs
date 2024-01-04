@@ -9,32 +9,22 @@ using StockRequester.Models;
 using StockRequester.Models.ViewModels;
 using StockRequester.Utility;
 using StockRequesterWeb.Areas.SiteAdmin.Controllers;
+using StockRequesterWeb.Controllers;
 
 namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 {
     [Area(nameof(CompanyUser))]
     [Authorize]
-    public class CompanyController : Controller
+    public class CompanyController : StockRequesterBaseController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<IdentityUser> _userManager;
-
         public CompanyController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+            : base(unitOfWork, userManager)
         {
-            _unitOfWork = unitOfWork;
-            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
-            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if (applicationUser is null)
-            {
-                //Response.StatusCode = 404;
-                return NotFound();
-            }
-
-            int? companyId = applicationUser.CompanyId;
+            int? companyId = CurrentUserCompanyId();
             if (companyId is null || companyId == 0)
             {
                 if (User.IsInRole(SD.Role_CompanyAdmin))
@@ -82,19 +72,22 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             _unitOfWork.Company.Add(obj);
             _unitOfWork.Save();
 
-            ApplicationUser? user = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            //IdentityUser? user = _userManager.GetUserAsync(HttpContext.User).GetAwaiter().GetResult();
+            ApplicationUser? applicationUser = CurrentApplicationUser();
 
-            if (user is null)
+            if (applicationUser is null)
             {
                 return NotFound();
             }
 
             if(obj.Id != 0)
             {
-                user.CompanyId = obj.Id;
-                _unitOfWork.ApplicationUser.Update(user);
+                applicationUser.CompanyId = obj.Id;
+                _unitOfWork.ApplicationUser.Update(applicationUser);
                 _unitOfWork.Save();
+            }
+            else
+            {
+                TempData["error"] = $"Company ID was not saved to this user's data";
             }
 
             TempData["success"] = $"Company \"{obj.Name}\" created successfully";
@@ -122,27 +115,30 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         [Authorize(Roles = SD.Role_CompanyUser)]
         public IActionResult JoinCompany(SelectCompanyViewModel vm)
         {
-
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            ApplicationUser? user = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            ApplicationUser? applicationUser = CurrentApplicationUser();
 
-            if (user is null)
+            if (applicationUser is null)
             {
                 return NotFound();
             }
 
             if (vm.CompanyId != 0)
             {
-                user.CompanyId = vm.CompanyId;
-                _unitOfWork.ApplicationUser.Update(user);
+                applicationUser.CompanyId = vm.CompanyId;
+                _unitOfWork.ApplicationUser.Update(applicationUser);
                 _unitOfWork.Save();
+                TempData["success"] = $"Joined company successfully";
+            }
+            else
+            {
+                TempData["error"] = $"Company ID was not saved to this user's data";
             }
 
-            TempData["success"] = $"Joined company successfully";
             return RedirectToAction(nameof(Index));
         }
     }
