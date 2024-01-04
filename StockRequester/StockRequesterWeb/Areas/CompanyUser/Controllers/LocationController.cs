@@ -148,7 +148,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{obj.Name}\" {(locationAlreadyExists ? "updated" : "created")} successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)));
+            return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
 
         public IActionResult Delete(int? id)
@@ -202,13 +202,11 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return RedirectToPage($"/Identity/Account/AccessDenied");
             }
 
-            int companyId = locationFromDb.CompanyId;
-
             _unitOfWork.Location.Remove(locationFromDb);
             _unitOfWork.Save();
             TempData["success"] = $"Location \"{locationFromDb.Name}\" deleted successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)));
+            return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
 
     }

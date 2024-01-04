@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StockRequester.DataAccess.Repository.IRepository;
@@ -14,15 +15,21 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
     public class TransferRequestController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TransferRequestController(IUnitOfWork unitOfWork)
+        public TransferRequestController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
-        public IActionResult Upsert(int companyId, int? id, int? originLocationId, int? destinationLocationId, int? backLocationId)
+        public IActionResult Upsert(int? id, int? originLocationId, int? destinationLocationId, int? backLocationId)
         {
-            if (companyId == 0)
+            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            if (applicationUser is null) return NotFound();            
+
+            int? companyId = applicationUser.CompanyId;
+            if (companyId is null || companyId == 0)
             {
                 string errorMessage = "No company ID for Upsert action";
                 ModelState.AddModelError(
@@ -50,11 +57,18 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                     u => u.Id == id,
                     includeProperties: $"{nameof(TransferRequest.Company)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)}"
                 );
+
+                if (!(IdentityUtility.UserHasAccess(applicationUser, tr)) &&
+                   !(User.IsInRole(SD.Role_SiteAdmin))
+                )
+                {
+                    return RedirectToPage($"/Identity/Account/AccessDenied");
+                }
             }
             else // insert
             {
                 tr = new TransferRequest();
-                tr.CompanyId = companyId;
+                tr.CompanyId = (int)companyId;
 
                 tr.Company = companyFromDb;
             }
@@ -125,7 +139,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             _unitOfWork.Save();
             TempData["success"] = $"Transfer request {(trAlreadyExists ? "updated" : "created")} successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId = obj.CompanyId });
+            return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
 
 
@@ -146,6 +160,14 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
+            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            if (!(IdentityUtility.UserHasAccess(applicationUser, trFromDb)) &&
+                !(User.IsInRole(SD.Role_SiteAdmin))
+            )
+            {
+                return RedirectToPage($"/Identity/Account/AccessDenied");
+            }
+
             return View(trFromDb);
         }
 
@@ -164,13 +186,19 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
-            int companyId = trFromDb.CompanyId;
+            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            if (!(IdentityUtility.UserHasAccess(applicationUser, trFromDb)) &&
+                !(User.IsInRole(SD.Role_SiteAdmin))
+            )
+            {
+                return RedirectToPage($"/Identity/Account/AccessDenied");
+            }
 
             _unitOfWork.TransferRequest.Remove(trFromDb);
             _unitOfWork.Save();
             TempData["success"] = $"Transfer Request deleted successfully";
 
-            return RedirectToAction(nameof(Index), ControllerUtility.ControllerName(typeof(CompanyController)), new { companyId });
+            return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
     }
 }

@@ -27,14 +27,14 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
         public IActionResult Index()
         {
-            ApplicationUser? user = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
-            if (user is null)
+            ApplicationUser? applicationUser = IdentityUtility.CurrentApplicationUser(_userManager, HttpContext);
+            if (applicationUser is null)
             {
                 //Response.StatusCode = 404;
                 return NotFound();
             }
 
-            int? companyId = user.CompanyId;
+            int? companyId = applicationUser.CompanyId;
             if (companyId is null || companyId == 0)
             {
                 if (User.IsInRole(SD.Role_CompanyAdmin))
