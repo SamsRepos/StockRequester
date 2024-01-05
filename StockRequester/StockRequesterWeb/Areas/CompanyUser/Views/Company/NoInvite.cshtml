@@ -2,7 +2,7 @@
     ViewData["Title"] = "No Invite";
 }
 
-@model string
+@model string //user's email address
 
 <form method="post">
     <div class="border p-3 mt-4">
@@ -12,8 +12,8 @@
         </div>
         <div class="mb-3 row p-1">
             <p>
-                No invite found for @Model<br />
-                Contact your company admin to be invited
+                @Model has not been invited to join a company yet<br />
+                Ask your company admin to get invited
             </p>
         </div>
 

@@ -55,6 +55,24 @@ namespace StockRequesterWeb.Areas.CompanyAdmin.Controllers
             _unitOfWork.Company.Update(companyFromDb);
             _unitOfWork.Save();
 
+            TempData["success"] = $"Created company invite for {obj.Email}";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult DeleteInvite(int id)
+        {
+            InvitedEmail? invitedEmailFromDb = _unitOfWork.InvitedEmail.Get(u=>u.Id == id);
+
+            if(invitedEmailFromDb is null) return NotFound();
+
+            if(!CurrentUserHasAccess(invitedEmailFromDb)) return NotFound();
+
+            _unitOfWork.InvitedEmail.Remove(invitedEmailFromDb);
+            _unitOfWork.Save();
+
+            TempData["success"] = $"Email invite \"{invitedEmailFromDb.Email}\" deleted successfully";
+
             return RedirectToAction(nameof(Index));
         }
     }

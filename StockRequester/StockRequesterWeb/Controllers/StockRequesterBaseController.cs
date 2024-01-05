@@ -96,5 +96,27 @@ namespace StockRequesterWeb.Controllers
 
             return (applicationUser.CompanyId == transferRequest.CompanyId);
         }
+
+        protected bool CurrentUserHasAccess(InvitedEmail? invitedEmail)
+        {
+            if (User.IsInRole(SD.Role_SiteAdmin))
+            {
+                return true;
+            }
+
+            ApplicationUser? applicationUser = CurrentApplicationUser();
+
+            if (applicationUser is null || invitedEmail is null)
+            {
+                return false;
+            }
+
+            if (applicationUser.CompanyId == 0 || invitedEmail.CompanyId == 0)
+            {
+                return false;
+            }
+
+            return (applicationUser.CompanyId == invitedEmail.CompanyId);
+        }
     }
 }
