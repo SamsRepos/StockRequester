@@ -17,13 +17,13 @@
         <input asp-for="TransferRequest.CompanyId" hidden />
         <input asp-for="TransferRequest.Company" hidden />
         
-        <div class="mb-3 row p-1">
+        <div class="py-2 col-12">
             <label asp-for="TransferRequest.Item" class="p-0"></label>
             <input asp-for="TransferRequest.Item" type="text" class="form-control" />
             <span asp-validation-for="TransferRequest.Item" class="text-danger"></span>
         </div>
 
-        <div class="mb-3 row p-1">
+        <div class="py-2 col-12">
             <label asp-for="TransferRequest.Quantity" class="p-0"></label>
             <input asp-for="TransferRequest.Quantity" type="text" class="form-control" />
             <span asp-validation-for="TransferRequest.Quantity" class="text-danger"></span>
@@ -45,10 +45,9 @@
             <span asp-validation-for="TransferRequest.DestinationLocationId" class="text-danger"></span>
         </div>
 
-        <div class="mb-3 row p-1">
-            <label asp-for="TransferRequest.MiscNotes" class="p-0"></label>
-            <input asp-for="TransferRequest.MiscNotes" type="text" class="form-control" />
-            <span asp-validation-for="TransferRequest.MiscNotes" class="text-danger"></span>
+        <div class="py-2 col-12">
+            <label asp-for="TransferRequest.MiscNotes" class="ms-2 text-muted"></label>
+            <textarea asp-for="TransferRequest.MiscNotes" class="form-control border-0 shadow"></textarea>
         </div>
 
         <div class="row p-1">
@@ -82,6 +81,24 @@
 
 
 @section Scripts {
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            menubar: ''
+            plugins: 'powerpaste tinymcespellchecker',
+            toolbar: 'undo redo | bold italic underline strikethrough | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            // ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        });
+    </script>
+    @* <textarea>
+      Welcome to TinyMCE!
+    </textarea> *@
     @{
         <partial name="_ValidationScriptsPartial" />
     }
