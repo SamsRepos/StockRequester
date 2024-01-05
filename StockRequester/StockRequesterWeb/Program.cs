@@ -5,6 +5,7 @@ using StockRequester.DataAccess.Repository;
 using Microsoft.AspNetCore.Identity;
 using StockRequester.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using StockRequester.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 //builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 // AddIdentity() expects a role:
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(
     options =>

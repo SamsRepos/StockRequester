@@ -17,7 +17,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
     [Authorize]
     public class CompanyController : StockRequesterBaseController
     {
-        public CompanyController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+        public CompanyController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
             : base(unitOfWork, userManager)
         {
         }

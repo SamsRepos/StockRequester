@@ -38,7 +38,6 @@ namespace StockRequester.DataAccess.Data
                     Id                    = 1,
                     Item                  = "Harry Potter",
                     Quantity              = 10,
-                    Reason                = "Need more",
                     CompanyId             = 1,
                     OriginLocationId      = 1,
                     DestinationLocationId = 2

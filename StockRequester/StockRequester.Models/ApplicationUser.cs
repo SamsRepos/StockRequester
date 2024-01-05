@@ -28,5 +28,10 @@ namespace StockRequester.Models
         //
         //
         //
+
+        // associated location
+        //   ... (easily changable.
+        //   ... Maybe in navbar on right, location name.
+        //   ... Click for drop-down "--Change Location--")
     }
 }

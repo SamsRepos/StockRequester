@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,17 @@ namespace StockRequester.Models
         [InverseProperty(nameof(Company.TransferRequests))]
         [ForeignKey(nameof(CompanyId))]
         public Company Company { get; set; }
+
+        //
+        // Requesting User:
+        //
+
+        //[Required]
+        //public int RequestingUserId { get; set; }
+
+        //[ValidateNever]
+        //[ForeignKey(nameof(RequestingUserId))]
+        //public ApplicationUser RequestingUser { get; set; }
 
         //
         //
@@ -70,15 +82,24 @@ namespace StockRequester.Models
         //
         //
 
-        [Required] public string Reason { get; set; }
-        //[Required] public public ICollection<ReasonTag> Reason { get; set; } with blob string and blob functions
+        //[Required] public string Status { get; set; }
 
-        // created by
-        // status - requested, pending, sent, fulfilled, cancelled with reason 
-        // estimated date - a response from origin
-        // delivery tracking info
+
+
+        // - Pending, by Destination
+        //    - Ability for Origin to reply e.g. "we have these books but they are not signed, do you still want them?" 
+        // - On stock transfer shelf, by Origin
+        // - Sent(can add deliver tracking numbers), by Origin
+        // - Cancelled (must give reason) therefore archived, by either Origin or Destination
+        // - Fulfilled therefore archived, by Destination
+
+        // - The ability to query/flag up requests that are taking a while
+
+        // - Estimated date?, by Origin
 
         [DisplayName("Miscellaneous Notes")]
         public string? MiscNotes { get; set; }
+
+        
     }
 }

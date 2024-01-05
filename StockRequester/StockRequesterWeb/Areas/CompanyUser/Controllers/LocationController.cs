@@ -15,7 +15,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
     public class LocationController : StockRequesterBaseController
     {
 
-        public LocationController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+        public LocationController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
             : base(unitOfWork, userManager)
         {
         }

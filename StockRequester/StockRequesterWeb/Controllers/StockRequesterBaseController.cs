@@ -10,9 +10,9 @@ namespace StockRequesterWeb.Controllers
     public class StockRequesterBaseController : Controller
     {
         protected readonly IUnitOfWork _unitOfWork;
-        protected readonly UserManager<IdentityUser> _userManager;
+        protected readonly UserManager<ApplicationUser> _userManager;
 
-        protected StockRequesterBaseController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+        protected StockRequesterBaseController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
@@ -20,8 +20,8 @@ namespace StockRequesterWeb.Controllers
 
         protected ApplicationUser? CurrentApplicationUser()
         {
-            IdentityUser? userAsIdentityUser = _userManager.GetUserAsync(HttpContext.User).GetAwaiter().GetResult();
-            return (ApplicationUser)userAsIdentityUser;
+            ApplicationUser? userAsIdentityUser = _userManager.GetUserAsync(HttpContext.User).GetAwaiter().GetResult();
+            return userAsIdentityUser;
         }
 
         protected int? CurrentUserCompanyId()

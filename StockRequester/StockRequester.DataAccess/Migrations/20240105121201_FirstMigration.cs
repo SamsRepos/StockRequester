@@ -231,7 +231,6 @@ namespace StockRequester.DataAccess.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     DestinationLocationId = table.Column<int>(type: "int", nullable: false),
                     OriginLocationId = table.Column<int>(type: "int", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MiscNotes = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -278,8 +277,8 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "TransferRequests",
-                columns: new[] { "Id", "CompanyId", "DestinationLocationId", "Item", "MiscNotes", "OriginLocationId", "Quantity", "Reason" },
-                values: new object[] { 1, 1, 2, "Harry Potter", null, 1, 10, "Need more" });
+                columns: new[] { "Id", "CompanyId", "DestinationLocationId", "Item", "MiscNotes", "OriginLocationId", "Quantity" },
+                values: new object[] { 1, 1, 2, "Harry Potter", null, 1, 10 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

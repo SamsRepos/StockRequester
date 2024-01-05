@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
+using StockRequester.Models.ViewModels;
 using StockRequester.Utility;
 using StockRequesterWeb.Controllers;
 
@@ -10,9 +11,9 @@ namespace StockRequesterWeb.Areas.CompanyAdmin.Controllers
 {
     [Area(nameof(CompanyAdmin))]
     [Authorize(Roles = $"{SD.Role_CompanyAdmin},{SD.Role_SiteAdmin}")]
-    public class CompanyUsers : StockRequesterBaseController
+    public class CompanyUsersController : StockRequesterBaseController
     {
-        public CompanyUsers(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+        public CompanyUsersController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
             : base(unitOfWork, userManager)
         {
         }
@@ -26,6 +27,15 @@ namespace StockRequesterWeb.Areas.CompanyAdmin.Controllers
                 u => u.Id == companyId,
                 includeProperties: $"{nameof(Company.Users)},{nameof(Company.InvitedEmails)}"
             );
+
+            var companyAdmins = _userManager.GetUsersInRoleAsync(
+                SD.Role_CompanyAdmin
+            ).Result.Select(u => u);
+
+            //CompanyUsersViewModel vm = new CompanyUsersViewModel()
+            //{
+            //    CompanyAdmins = companyFromDb.Users.Select(u => u.CompanyId ==)
+            //}
 
             return View(companyFromDb);
         }

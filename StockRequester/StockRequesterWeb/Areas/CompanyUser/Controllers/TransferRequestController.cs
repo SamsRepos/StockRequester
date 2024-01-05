@@ -15,7 +15,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
     [Area(nameof(CompanyUser))]
     public class TransferRequestController : StockRequesterBaseController
     {
-        public TransferRequestController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
+        public TransferRequestController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
             : base(unitOfWork, userManager)
         {
         }

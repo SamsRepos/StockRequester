@@ -351,10 +351,6 @@ namespace StockRequester.DataAccess.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -373,8 +369,7 @@ namespace StockRequester.DataAccess.Migrations
                             DestinationLocationId = 2,
                             Item = "Harry Potter",
                             OriginLocationId = 1,
-                            Quantity = 10,
-                            Reason = "Need more"
+                            Quantity = 10
                         });
                 });
 

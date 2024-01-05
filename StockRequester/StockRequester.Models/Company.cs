@@ -26,13 +26,6 @@ namespace StockRequester.Models
 
         [ValidateNever]
         public ICollection<InvitedEmail> InvitedEmails { get; set; }
-        //[ValidateNever]
-        //public string InvitedEmailsBlobbed
-        //{
-        //    get => JsonConvert.SerializeObject(InvitedEmails);
-        //    set => InvitedEmails = JsonConvert.DeserializeObject<ICollection<string>>(value);
-        //}
 
-        // reason tags
     }
 }
