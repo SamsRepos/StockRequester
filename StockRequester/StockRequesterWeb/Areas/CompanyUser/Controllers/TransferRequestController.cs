@@ -124,12 +124,27 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             {
                 if (!CurrentUserHasAccess(tr)) return RedirectToPage($"/Identity/Account/AccessDenied");
                 _unitOfWork.TransferRequest.Update(tr);
+                _unitOfWork.Save();
             }
             else
             {
+                RequestStatus rs = new RequestStatus
+                {
+                    Status = SD.RequestStatus_Pending
+                };
+                _unitOfWork.RequestStatus.Add(rs);
+                _unitOfWork.Save();
+                if(rs.Id == 0)
+                {
+                    TempData["Error"] = $"RequestStatus added to DB but still has Id 0";
+                    return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
+                }
+
+                tr.StatusId = rs.Id;
                 _unitOfWork.TransferRequest.Add(tr);
+                _unitOfWork.Save();
             }
-            _unitOfWork.Save();
+
             TempData["success"] = $"Transfer request {(trAlreadyExists ? "updated" : "created")} successfully";
 
             return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));

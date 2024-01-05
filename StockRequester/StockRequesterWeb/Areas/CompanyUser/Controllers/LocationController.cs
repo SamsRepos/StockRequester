@@ -37,16 +37,18 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return RedirectToPage($"/Identity/Account/AccessDenied");
             }
 
-            foreach (TransferRequest tc in locationFromDb.TransferRequestsFromThisOrigin)
+            foreach (TransferRequest tr in locationFromDb.TransferRequestsFromThisOrigin)
             {
-                tc.OriginLocation = _unitOfWork.Location.Get(u => u.Id == tc.OriginLocationId);
-                tc.DestinationLocation = _unitOfWork.Location.Get(u => u.Id == tc.DestinationLocationId);
+                tr.OriginLocation = _unitOfWork.Location.Get(u => u.Id == tr.OriginLocationId);
+                tr.DestinationLocation = _unitOfWork.Location.Get(u => u.Id == tr.DestinationLocationId);
+                tr.Status = _unitOfWork.RequestStatus.Get(u => u.Id == tr.StatusId);
             }
 
-            foreach (TransferRequest tc in locationFromDb.TransferRequestsToThisDestination)
+            foreach (TransferRequest tr in locationFromDb.TransferRequestsToThisDestination)
             {
-                tc.OriginLocation = _unitOfWork.Location.Get(u => u.Id == tc.OriginLocationId);
-                tc.DestinationLocation = _unitOfWork.Location.Get(u => u.Id == tc.DestinationLocationId);
+                tr.OriginLocation = _unitOfWork.Location.Get(u => u.Id == tr.OriginLocationId);
+                tr.DestinationLocation = _unitOfWork.Location.Get(u => u.Id == tr.DestinationLocationId);
+                tr.Status = _unitOfWork.RequestStatus.Get(u => u.Id == tr.StatusId);
             }
 
             return View(locationFromDb);

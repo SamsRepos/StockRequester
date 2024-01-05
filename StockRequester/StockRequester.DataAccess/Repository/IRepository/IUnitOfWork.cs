@@ -13,6 +13,7 @@ namespace StockRequester.DataAccess.Repository.IRepository
         ITransferRequestRepository TransferRequest { get; }
         IApplicationUserRepository ApplicationUser { get; }
         IInvitedEmailRepository InvitedEmail { get; }
+        IRequestStatusRepository RequestStatus { get; }
         public void Save();
     }
 }

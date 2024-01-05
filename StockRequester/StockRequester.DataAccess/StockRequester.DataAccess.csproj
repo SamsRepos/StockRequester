@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StockRequester.Models\StockRequester.Models.csproj" />
+    <ProjectReference Include="..\StockRequester.Utility\StockRequester.Utility.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240105121201_FirstMigration")]
+    [Migration("20240105200421_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -325,6 +325,30 @@ namespace StockRequester.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("StockRequester.Models.RequestStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RequestStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Status = "Pending"
+                        });
+                });
+
             modelBuilder.Entity("StockRequester.Models.TransferRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -354,6 +378,9 @@ namespace StockRequester.DataAccess.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -361,6 +388,8 @@ namespace StockRequester.DataAccess.Migrations
                     b.HasIndex("DestinationLocationId");
 
                     b.HasIndex("OriginLocationId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("TransferRequests");
 
@@ -372,7 +401,8 @@ namespace StockRequester.DataAccess.Migrations
                             DestinationLocationId = 2,
                             Item = "Harry Potter",
                             OriginLocationId = 1,
-                            Quantity = 10
+                            Quantity = 10,
+                            StatusId = 1
                         });
                 });
 
@@ -484,11 +514,19 @@ namespace StockRequester.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("StockRequester.Models.RequestStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Company");
 
                     b.Navigation("DestinationLocation");
 
                     b.Navigation("OriginLocation");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("StockRequester.Models.ApplicationUser", b =>

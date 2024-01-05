@@ -37,12 +37,17 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 }
             }
 
-            Company obj = _unitOfWork.Company.Get(
+            Company companyFromDb = _unitOfWork.Company.Get(
                 u => u.Id == companyId,
-                includeProperties: $"{nameof(Company.TransferRequests)}, {nameof(Company.Locations)}, {nameof(Company.Users)}"
+                includeProperties: $"{nameof(Company.TransferRequests)},{nameof(Company.Locations)},{nameof(Company.Users)}"
             );
 
-            return View(obj);
+            foreach (TransferRequest tr in companyFromDb.TransferRequests)
+            {
+                tr.Status = _unitOfWork.RequestStatus.Get(u => u.Id == tr.StatusId);
+            }
+
+            return View(companyFromDb);
         }
 
         [Authorize(Roles = SD.Role_CompanyAdmin)]

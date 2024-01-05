@@ -52,6 +52,9 @@
                 <b>Destination</b>
             </th>
             <th class="text-white">
+                <b>Status</b>
+            </th>
+            <th class="text-white">
                 <b>Actions</b>
             </th>
         </tr>
@@ -72,7 +75,9 @@
                 <td class="text-white">
                     @obj.DestinationLocation.Name
                 </td>
-
+                <td class="text-white">
+                    @obj.Status.Status
+                </td>
                 <td class="text-white">
                     <div class="w-100 btn-group" role="group">
                         <a asp-controller="TransferRequest" asp-action="Upsert" asp-route-backLocationId="@Model.Id" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
@@ -126,6 +131,9 @@
                 <b>Destination</b>
             </th>
             <th class="text-white">
+                <b>Status</b>
+            </th>
+            <th class="text-white">
                 <b>Actions</b>
             </th>
         </tr>
@@ -146,7 +154,9 @@
                 <td class="text-white">
                     @obj.DestinationLocation.Name
                 </td>
-
+                <td class="text-white">
+                    @obj.Status.Status
+                </td>
                 <td class="text-white">
                     <div class="w-100 btn-group" role="group">
                         <a asp-controller="TransferRequest" asp-action="Upsert" asp-route-id="@obj.Id" asp-route-backLocationId="@Model.Id" class="btn btn-primary mx-2">

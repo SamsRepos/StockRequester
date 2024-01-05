@@ -41,6 +41,19 @@ namespace StockRequester.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RequestStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -231,6 +244,7 @@ namespace StockRequester.DataAccess.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     DestinationLocationId = table.Column<int>(type: "int", nullable: false),
                     OriginLocationId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
                     MiscNotes = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -254,6 +268,12 @@ namespace StockRequester.DataAccess.Migrations
                         principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TransferRequests_RequestStatuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "RequestStatuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -267,6 +287,11 @@ namespace StockRequester.DataAccess.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "RequestStatuses",
+                columns: new[] { "Id", "Status" },
+                values: new object[] { 1, "Pending" });
+
+            migrationBuilder.InsertData(
                 table: "Locations",
                 columns: new[] { "Id", "CompanyId", "Name" },
                 values: new object[,]
@@ -277,8 +302,8 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "TransferRequests",
-                columns: new[] { "Id", "CompanyId", "DestinationLocationId", "Item", "MiscNotes", "OriginLocationId", "Quantity" },
-                values: new object[] { 1, 1, 2, "Harry Potter", null, 1, 10 });
+                columns: new[] { "Id", "CompanyId", "DestinationLocationId", "Item", "MiscNotes", "OriginLocationId", "Quantity", "StatusId" },
+                values: new object[] { 1, 1, 2, "Harry Potter", null, 1, 10, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -348,6 +373,11 @@ namespace StockRequester.DataAccess.Migrations
                 name: "IX_TransferRequests_OriginLocationId",
                 table: "TransferRequests",
                 column: "OriginLocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransferRequests_StatusId",
+                table: "TransferRequests",
+                column: "StatusId");
         }
 
         /// <inheritdoc />
@@ -382,6 +412,9 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "RequestStatuses");
 
             migrationBuilder.DropTable(
                 name: "Companies");
