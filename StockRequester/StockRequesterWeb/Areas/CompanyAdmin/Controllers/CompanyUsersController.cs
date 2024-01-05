@@ -28,16 +28,17 @@ namespace StockRequesterWeb.Areas.CompanyAdmin.Controllers
                 includeProperties: $"{nameof(Company.Users)},{nameof(Company.InvitedEmails)}"
             );
 
-            var companyAdmins = _userManager.GetUsersInRoleAsync(
-                SD.Role_CompanyAdmin
-            ).Result.Select(u => u);
+            var allCompanyAdmins = _userManager.GetUsersInRoleAsync(SD.Role_CompanyAdmin).Result;
+            var allCompanyUsers  = _userManager.GetUsersInRoleAsync(SD.Role_CompanyUser).Result;
 
-            //CompanyUsersViewModel vm = new CompanyUsersViewModel()
-            //{
-            //    CompanyAdmins = companyFromDb.Users.Select(u => u.CompanyId ==)
-            //}
+            CompanyUsersViewModel vm = new CompanyUsersViewModel()
+            {
+                CompanyAdmins = allCompanyAdmins.Where(u => u.CompanyId == companyFromDb.Id),
+                CompanyUsers  = allCompanyUsers.Where(u => u.CompanyId == companyFromDb.Id),
+                InvitedEmails = companyFromDb.InvitedEmails
+            };
 
-            return View(companyFromDb);
+            return View(vm);
         }
 
         public IActionResult Invite()

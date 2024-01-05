@@ -14,7 +14,7 @@ namespace StockRequester.Models.ViewModels
         public IEnumerable<ApplicationUser> CompanyAdmins { get; set; }
 
         [ValidateNever]
-        public IEnumerable<SelectListItem> CompanyUsers { get; set; }
+        public IEnumerable<ApplicationUser> CompanyUsers { get; set; }
 
         [ValidateNever]
         public ICollection<InvitedEmail> InvitedEmails { get; set; }
