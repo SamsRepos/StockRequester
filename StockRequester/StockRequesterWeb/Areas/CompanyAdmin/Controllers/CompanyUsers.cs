@@ -24,10 +24,38 @@ namespace StockRequesterWeb.Areas.CompanyAdmin.Controllers
 
             Company companyFromDb = _unitOfWork.Company.Get(
                 u => u.Id == companyId,
-                includeProperties: nameof(Company.Users)
+                includeProperties: $"{nameof(Company.Users)},{nameof(Company.InvitedEmails)}"
             );
 
             return View(companyFromDb);
+        }
+
+        public IActionResult Invite()
+        {
+            InvitedEmail obj = new InvitedEmail()
+            {
+                CompanyId = CurrentUserCompanyId()
+            };
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        public IActionResult Invite(InvitedEmail obj)
+        {
+            int? companyId = CurrentUserCompanyId();
+            if (companyId is null || companyId == 0) return NotFound();
+
+            Company companyFromDb = _unitOfWork.Company.Get(
+                (u => u.Id == companyId),
+                includeProperties: nameof(Company.InvitedEmails)
+            );
+
+            companyFromDb.InvitedEmails.Add(obj);
+            _unitOfWork.Company.Update(companyFromDb);
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

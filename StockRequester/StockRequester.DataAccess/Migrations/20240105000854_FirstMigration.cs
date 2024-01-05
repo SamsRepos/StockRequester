@@ -96,6 +96,26 @@ namespace StockRequester.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InvitedEmails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InvitedEmails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InvitedEmails_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
                 {
@@ -306,6 +326,11 @@ namespace StockRequester.DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InvitedEmails_CompanyId",
+                table: "InvitedEmails",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Locations_CompanyId",
                 table: "Locations",
                 column: "CompanyId");
@@ -343,6 +368,9 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "InvitedEmails");
 
             migrationBuilder.DropTable(
                 name: "TransferRequests");

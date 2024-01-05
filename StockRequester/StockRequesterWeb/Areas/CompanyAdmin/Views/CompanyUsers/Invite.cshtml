@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Invite User Email";
+}
+
+@model InvitedEmail
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Add A New Invited User Email</h2>
+            <hr />
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Id" hidden />
+        <input asp-for="CompanyId" hidden />
+        <div class="mb-3 row p-1">
+            <label asp-for="Email" class="p-0"></label>
+            <input asp-for="Email" type="text" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="row p-1">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle"></i> Create
+                </button>
+                <a asp-controller="CompanyUsers" asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left-circle"></i> Back to Users List
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+            </div>
+        </div>
+
+
+
+    </div>
+</form>
+
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

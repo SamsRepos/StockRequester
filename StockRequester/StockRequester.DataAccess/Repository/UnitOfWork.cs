@@ -15,6 +15,7 @@ namespace StockRequester.DataAccess.Repository
         public ILocationRepository Location { get; private set; }
         public ITransferRequestRepository TransferRequest { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
+        public IInvitedEmailRepository InvitedEmail { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -22,6 +23,7 @@ namespace StockRequester.DataAccess.Repository
             Location = new LocationRepository(_db);
             TransferRequest = new TransferRequestRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
+            InvitedEmail = new InvitedEmailRepository(_db);
         }
         public void Save()
         {

@@ -98,26 +98,35 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         [Authorize(Roles = SD.Role_CompanyUser)]
         public IActionResult JoinCompany()
         {
-            SelectCompanyViewModel vm = new SelectCompanyViewModel();
+            ApplicationUser? applicationUser = CurrentApplicationUser();
+            if(applicationUser is null)
+            {
+                return NotFound();
+            }
 
-            vm.CompaniesList = _unitOfWork.Company.GetAll().Select(
-                u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                }
+            InvitedEmail? invitedEmailFromDb = _unitOfWork.InvitedEmail.Get(
+                (u=>u.Email == applicationUser.Email),
+                includeProperties: nameof(InvitedEmail.Company)
             );
 
-            return View(vm);
+            if (invitedEmailFromDb is not null)
+            {
+                return View(invitedEmailFromDb);
+            }
+            else
+            {
+                return View("NoInvite", applicationUser.Email);
+            }
+            
         }
 
         [HttpPost]
         [Authorize(Roles = SD.Role_CompanyUser)]
-        public IActionResult JoinCompany(SelectCompanyViewModel vm)
+        public IActionResult JoinCompany(InvitedEmail invitedEmail)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return NotFound();
             }
 
             ApplicationUser? applicationUser = CurrentApplicationUser();
@@ -127,10 +136,12 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
-            if (vm.CompanyId != 0)
+            if (invitedEmail.CompanyId != 0)
             {
-                applicationUser.CompanyId = vm.CompanyId;
+                applicationUser.CompanyId = invitedEmail.CompanyId;
                 _unitOfWork.ApplicationUser.Update(applicationUser);
+                InvitedEmail invitedEmailFromDb = _unitOfWork.InvitedEmail.Get(u=>u.Id == invitedEmail.Id);
+                _unitOfWork.InvitedEmail.Remove(invitedEmailFromDb);
                 _unitOfWork.Save();
                 TempData["success"] = $"Joined company successfully";
             }

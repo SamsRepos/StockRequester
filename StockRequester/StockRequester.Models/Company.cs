@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,7 +23,16 @@ namespace StockRequester.Models
 
         [ValidateNever]
         public ICollection<ApplicationUser> Users { get; set; }
-      
+
+        [ValidateNever]
+        public ICollection<InvitedEmail> InvitedEmails { get; set; }
+        //[ValidateNever]
+        //public string InvitedEmailsBlobbed
+        //{
+        //    get => JsonConvert.SerializeObject(InvitedEmails);
+        //    set => InvitedEmails = JsonConvert.DeserializeObject<ICollection<string>>(value);
+        //}
+
         // reason tags
     }
 }

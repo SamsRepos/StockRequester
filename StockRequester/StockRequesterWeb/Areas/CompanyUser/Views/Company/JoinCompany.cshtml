@@ -2,23 +2,20 @@
     ViewData["Title"] = "Join Company";
 }
 
-@model SelectCompanyViewModel
+@model InvitedEmail
 
 <form method="post">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
-            <h2 class="text-primary">Select Company</h2>
+            <h2 class="text-primary">Join Company</h2>
             <hr />
         </div>
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        
-        <div class="form-floating mb-3 col-md-6">
-            <select asp-for="CompanyId" asp-items="@Model.CompaniesList" class="form-select">
-                <option disabled selected>--Select a company--</option>
-            </select>
-            <span asp-validation-for="CompanyId" class="text-danger"></span>
-        </div>
 
+        <p>@Model.Company.Name</p>
+        <input asp-for="Id" hidden />
+        <input asp-for="Email" hidden />
+        <input asp-for="CompanyId" hidden />
+        <input asp-for="Company" hidden />
         <div class="row p-1">
             <div class="col-6 col-md-3">
                 <button type="submit" class="btn btn-primary">
@@ -33,11 +30,6 @@
 </form>
 
 
-@section Scripts {
-    @{
-        <partial name="_ValidationScriptsPartial" />
-    }
-}
 
 
 

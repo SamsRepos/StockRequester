@@ -14,9 +14,5 @@ namespace StockRequester.Utility
 
         public const string RegisterRoleText_CompanyAdmin = "Register a new company profile";
         public const string RegisterRoleText_CompanyUser  = "Join an existing company profile";
-
-        public const string UserStatus_CompanyAdmin = "CompanyAdmin";
-        public const string UserStatus_CompanyUser  = "CompanyUser";
-        public const string UserStatus_Invited      = "Invited";
     }
 }

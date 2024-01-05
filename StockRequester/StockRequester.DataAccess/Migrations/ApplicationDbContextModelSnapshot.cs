@@ -264,6 +264,28 @@ namespace StockRequester.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("StockRequester.Models.InvitedEmail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("InvitedEmails");
+                });
+
             modelBuilder.Entity("StockRequester.Models.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -423,6 +445,16 @@ namespace StockRequester.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("StockRequester.Models.InvitedEmail", b =>
+                {
+                    b.HasOne("StockRequester.Models.Company", "Company")
+                        .WithMany("InvitedEmails")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("StockRequester.Models.Location", b =>
                 {
                     b.HasOne("StockRequester.Models.Company", "Company")
@@ -473,6 +505,8 @@ namespace StockRequester.DataAccess.Migrations
 
             modelBuilder.Entity("StockRequester.Models.Company", b =>
                 {
+                    b.Navigation("InvitedEmails");
+
                     b.Navigation("Locations");
 
                     b.Navigation("TransferRequests");
