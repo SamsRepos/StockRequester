@@ -150,6 +150,52 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
         }
 
+        public IActionResult UpdateStatus(int id, int? backLocationId)
+        {
+            TransferRequest? tr = _unitOfWork.TransferRequest.Get(
+                (u => u.Id == id),
+                includeProperties: nameof(TransferRequest.Status)
+            );
+
+            if(tr is null || !CurrentUserHasAccess(tr)) return NotFound();
+
+            UpdateStatusViewModel vm = new UpdateStatusViewModel
+            {
+                TransferRequest = tr,
+                StatusesList    = SD.StatusesList(),
+                BackLocation    = backLocationId is not null ? _unitOfWork.Location.Get(u => u.Id == backLocationId) : null
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateStatus(UpdateStatusViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["error"] = $"ModelState is not valid";
+
+                Company companyFromDb = _unitOfWork.Company.Get(
+                    u => u.Id == CurrentUserCompanyId(),
+                    includeProperties: nameof(Company.Locations)
+                );
+
+                vm.StatusesList = SD.StatusesList();
+
+                return View(vm);
+            }
+
+            if (!CurrentUserHasAccess(vm.TransferRequest)) return NotFound();
+
+            _unitOfWork.RequestStatus.Update(vm.TransferRequest.Status);
+            _unitOfWork.Save();
+
+            TempData["success"] = $"Status updated: {vm.TransferRequest.Status.Status}";
+
+            return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
+        }
+
         [Authorize(Roles = SD.Role_CompanyAdmin)]
         public IActionResult Delete(int? id)
         {
@@ -185,7 +231,11 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return NotFound();
             }
 
-            TransferRequest? trFromDb = _unitOfWork.TransferRequest.Get(u => u.Id == id);
+            TransferRequest? trFromDb = _unitOfWork.TransferRequest.Get(
+                (u => u.Id == id),
+                includeProperties: nameof(TransferRequest.Status)
+            );
+            RequestStatus? statusFromDb = trFromDb.Status;
 
             if (trFromDb is null)
             {
@@ -198,6 +248,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             }
 
             _unitOfWork.TransferRequest.Remove(trFromDb);
+            _unitOfWork.RequestStatus.Remove(statusFromDb);
             _unitOfWork.Save();
             TempData["success"] = $"Transfer Request deleted successfully";
 

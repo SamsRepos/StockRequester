@@ -1,62 +1,40 @@
-﻿@model TransferRequestViewModel
+﻿@model UpdateStatusViewModel
 
 @{
-    ViewData["Title"] = $"{(Model.TransferRequest.Id != 0 ? "Edit" : "Create")} Transfer Request";
+    ViewData["Title"] = "Update Status";
 }
 
 <form method="post">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">
-                <i class="bi bi-truck"></i> @(Model.TransferRequest.Id != 0 ? "Edit" : "Create") Transfer Request
+                Update Request Status
             </h2>
             <hr />
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
         <input asp-for="TransferRequest.Id" hidden />
         <input asp-for="TransferRequest.CompanyId" hidden />
-        <input asp-for="TransferRequest.Company" hidden />
-        <input asp-for="TransferRequest.StatusId" hidden />
-        <input asp-for="TransferRequest.Status" hidden />
-
-        <div class="py-2 col-12">
-            <label asp-for="TransferRequest.Item" class="p-0"></label>
-            <input asp-for="TransferRequest.Item" type="text" class="form-control" />
-            <span asp-validation-for="TransferRequest.Item" class="text-danger"></span>
-        </div>
-
-        <div class="py-2 col-12">
-            <label asp-for="TransferRequest.Quantity" class="p-0"></label>
-            <input asp-for="TransferRequest.Quantity" type="text" class="form-control" />
-            <span asp-validation-for="TransferRequest.Quantity" class="text-danger"></span>
-        </div>
+        <input asp-for="TransferRequest.Item" hidden />
+        <input asp-for="TransferRequest.Quantity" hidden />
+        <input asp-for="TransferRequest.DestinationLocationId" hidden />
+        <input asp-for="TransferRequest.OriginLocationId" hidden />
+        <input asp-for="TransferRequest.Status.Id" hidden />
 
         <div class="form-floating py-2 col-12">
-            <select asp-for="TransferRequest.OriginLocationId" asp-items="@Model.CompanyLocationsList" class="form-select border-0 shadow">
-                <option disabled selected>--Select Origin Location--</option>
-            </select>
-            <label asp-for="TransferRequest.OriginLocationId" class="ms-2 text-black"></label>
-            <span asp-validation-for="TransferRequest.OriginLocationId" class="text-danger"></span>
-        </div>
-
-        <div class="form-floating py-2 col-12">
-            <select asp-for="TransferRequest.DestinationLocationId" asp-items="@Model.CompanyLocationsList" class="form-select border-0 shadow">
+            <select asp-for="TransferRequest.Status.Status" asp-items="@Model.StatusesList" class="form-select border-0 shadow">
                 <option disabled selected>--Select Destination Location--</option>
             </select>
-            <label asp-for="TransferRequest.DestinationLocationId" class="ms-2 text-black"></label>
-            <span asp-validation-for="TransferRequest.DestinationLocationId" class="text-danger"></span>
-        </div>
-
-        <div class="py-2 col-12">
-            <label asp-for="TransferRequest.MiscNotes" class="ms-2 text-muted"></label>
-            <textarea asp-for="TransferRequest.MiscNotes" class="form-control border-0 shadow"></textarea>
+            <label asp-for="TransferRequest.Status.Status" class="ms-2 text-black"></label>
+            <span asp-validation-for="TransferRequest.Status.Status" class="text-danger"></span>
         </div>
 
         <div class="row p-1">
             <div class="col-6 col-md-3">
                 <div class="w-100 btn-group" role="group">
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-check-circle"></i> @(Model.TransferRequest.Id != 0 ? "Update" : "Create")
+                        <i class="bi bi-check-circle"></i> Update Status
                     </button>
                     @if (Model.BackLocation is null)
                     {
@@ -76,8 +54,6 @@
             </div>
         </div>
 
-
-
     </div>
 </form>
 
@@ -87,7 +63,7 @@
         tinymce.init({
             selector: 'textarea',
             menubar: ''
-            plugins: 'powerpaste tinymcespellchecker',
+                    plugins: 'powerpaste tinymcespellchecker',
             toolbar: 'undo redo | bold italic underline strikethrough | emoticons charmap | removeformat',
             tinycomments_mode: 'embedded',
             tinycomments_author: 'Author name',
