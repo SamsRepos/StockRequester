@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace StockRequester.Models
 {
@@ -9,6 +10,7 @@ namespace StockRequester.Models
     {
         public static Item BlobToItem(string blob)
         {
+            if(blob is null) return new Item();
             return JsonConvert.DeserializeObject<Item>(blob);
         }
 
@@ -22,7 +24,10 @@ namespace StockRequester.Models
             return ItemToBlob(this);
         }
 
+        [DisplayName("Item Name")]
         public string Name { get; set; }
+
+        [DisplayName("Item Description")]
         public string Description { get; set; }
     }
 }

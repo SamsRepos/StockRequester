@@ -86,6 +86,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             TransferRequestViewModel trVm = new()
             {
                 TransferRequest = tr,
+                Item = Item.BlobToItem(tr.ItemBlob),
                 CompanyLocationsList = companyLocationsList,
                 BackLocation = backLocationId is not null ? _unitOfWork.Location.Get(u => u.Id == backLocationId) : null
             };
@@ -117,6 +118,8 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
                 return View(trVm);
             }
+
+            tr.ItemBlob = trVm.Item.ToBlob();
 
             bool trAlreadyExists = !(tr.Id == 0);
 

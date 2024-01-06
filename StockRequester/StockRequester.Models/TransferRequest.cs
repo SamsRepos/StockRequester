@@ -42,7 +42,14 @@ namespace StockRequester.Models
         //[ForeignKey(nameof(RequestingUserId))]
         //public ApplicationUser RequestingUser { get; set; }
 
-        [Required] public string ItemBlob { get; set; }
+        [ValidateNever]
+        [Required] 
+        public string ItemBlob { get; set; }
+
+        public Item GetItem()
+        {
+            return Item.BlobToItem(ItemBlob);
+        }
 
         [Required]
         [Range(1, 10000)]

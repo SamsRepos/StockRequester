@@ -106,7 +106,7 @@
     <thead>
         <tr>
             <th class="text-white">
-                <b>Item</b>
+                <b>Item Name</b>
             </th>
             <th class="text-white">
                 <b>Quantity</b>
@@ -126,11 +126,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var obj in Model.TransferRequests.OrderBy(u => u.ItemBlob))
+        @foreach (var obj in Model.TransferRequests.OrderBy(u => u.GetItem().Name))
         {
             <tr>
                 <td class="text-white">
-                    @obj.ItemBlob
+                    @obj.GetItem().Name
                 </td>
                 <td class="text-white">
                     @obj.Quantity

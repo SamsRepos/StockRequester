@@ -17,7 +17,7 @@ namespace StockRequester.DataAccess.Repository
         {
         }
 
-        public void Update(RequestStatus status)
+        public override void Update(RequestStatus status)
         {
             _db.RequestStatuses.Update(status);
         }

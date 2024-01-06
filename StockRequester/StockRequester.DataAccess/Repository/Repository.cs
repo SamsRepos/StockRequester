@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using StockRequester.DataAccess.Data;
 using StockRequester.DataAccess.Repository.IRepository;
+using StockRequester.Models;
 using System.Linq.Expressions;
 
 namespace StockRequester.DataAccess.Repository
@@ -20,6 +21,11 @@ namespace StockRequester.DataAccess.Repository
         public void Add(T entity)
         {
             dbSet.Add(entity);
+        }
+
+        public virtual void Update(T entity)
+        {
+            dbSet.Update(entity);
         }
 
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool noTracking = false)

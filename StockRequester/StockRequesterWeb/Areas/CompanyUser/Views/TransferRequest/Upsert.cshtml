@@ -18,11 +18,17 @@
         <input asp-for="TransferRequest.Company" hidden />
         <input asp-for="TransferRequest.StatusId" hidden />
         <input asp-for="TransferRequest.Status" hidden />
+        <input asp-for="TransferRequest.ItemBlob" hidden />
 
         <div class="py-2 col-12">
-            <label asp-for="TransferRequest.ItemBlob" class="p-0"></label>
-            <input asp-for="TransferRequest.ItemBlob" type="text" class="form-control" />
-            <span asp-validation-for="TransferRequest.ItemBlob" class="text-danger"></span>
+            <label asp-for="Item.Name" class="p-0"></label>
+            <input asp-for="Item.Name" type="text" class="form-control" />
+            <span asp-validation-for="Item.Name" class="text-danger"></span>
+        </div>
+
+        <div class="py-2 col-12">
+            <label asp-for="Item.Description" class="ms-2 text-muted"></label>
+            <textarea asp-for="Item.Description" class="form-control border-0 shadow"></textarea>
         </div>
 
         <div class="py-2 col-12">

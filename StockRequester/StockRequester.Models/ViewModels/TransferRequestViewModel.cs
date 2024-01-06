@@ -11,6 +11,7 @@ namespace StockRequester.Models.ViewModels
     public class TransferRequestViewModel
     {
         public TransferRequest TransferRequest { get; set; }
+        public Item Item { get; set; }
         
         [ValidateNever]
         public IEnumerable<SelectListItem> CompanyLocationsList { get; set; }
