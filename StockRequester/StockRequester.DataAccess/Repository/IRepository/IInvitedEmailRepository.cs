@@ -9,6 +9,5 @@ namespace StockRequester.DataAccess.Repository.IRepository
 {
     public interface IInvitedEmailRepository : IRepository<InvitedEmail>
     {
-        void Update(InvitedEmail obj);
     }
 }

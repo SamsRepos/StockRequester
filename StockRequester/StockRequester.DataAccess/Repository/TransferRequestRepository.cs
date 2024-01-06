@@ -17,9 +17,5 @@ namespace StockRequester.DataAccess.Repository
         {
         }
 
-        public void Update(TransferRequest transferRequest)
-        {
-            _db.TransferRequests.Update(transferRequest);
-        }
     }
 }

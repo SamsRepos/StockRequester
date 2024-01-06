@@ -12,9 +12,5 @@ namespace StockRequester.DataAccess.Repository
         {
         }
 
-        public void Update(ApplicationUser applicationUser)
-        {
-            _db.ApplicationUsers.Update(applicationUser);
-        }
     }
 }

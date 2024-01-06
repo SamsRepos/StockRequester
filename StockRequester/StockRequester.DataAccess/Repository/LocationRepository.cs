@@ -12,9 +12,5 @@ namespace StockRequester.DataAccess.Repository
         {
         }
 
-        public void Update(Location location)
-        {
-            _db.Locations.Update(location);
-        }
     }
 }

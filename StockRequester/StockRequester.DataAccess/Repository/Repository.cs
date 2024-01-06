@@ -23,7 +23,7 @@ namespace StockRequester.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public virtual void Update(T entity)
+        public void Update(T entity)
         {
             dbSet.Update(entity);
         }

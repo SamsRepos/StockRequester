@@ -9,6 +9,5 @@ namespace StockRequester.DataAccess.Repository.IRepository
 {
     public interface ITransferRequestRepository : IRepository<TransferRequest>
     {
-        void Update(TransferRequest transferRequest);
     }
 }

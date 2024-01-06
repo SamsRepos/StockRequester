@@ -17,9 +17,5 @@ namespace StockRequester.DataAccess.Repository
         {
         }
 
-        public void Update(InvitedEmail obj)
-        {
-            _db.InvitedEmails.Update(obj);
-        }
     }
 }
