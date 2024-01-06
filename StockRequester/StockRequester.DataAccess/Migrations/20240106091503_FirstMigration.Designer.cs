@@ -12,7 +12,7 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240105200421_FirstMigration")]
+    [Migration("20240106091503_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -364,7 +364,7 @@ namespace StockRequester.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<string>("Item")
+                    b.Property<string>("ItemBlob")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -399,7 +399,7 @@ namespace StockRequester.DataAccess.Migrations
                             Id = 1,
                             CompanyId = 1,
                             DestinationLocationId = 2,
-                            Item = "Harry Potter",
+                            ItemBlob = "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}",
                             OriginLocationId = 1,
                             Quantity = 10,
                             StatusId = 1

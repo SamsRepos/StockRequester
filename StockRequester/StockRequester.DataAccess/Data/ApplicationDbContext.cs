@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using StockRequester.Models;
 using StockRequester.Utility;
 
@@ -38,7 +39,11 @@ namespace StockRequester.DataAccess.Data
                 new TransferRequest
                 {
                     Id                    = 1,
-                    Item                  = "Harry Potter",
+                    ItemBlob              = Item.ItemToBlob(new Item
+                                            {
+                                                Name = "Harry Potter",
+                                                Description = "Wizarding World Book!"
+                                            }),
                     Quantity              = 10,
                     CompanyId             = 1,
                     OriginLocationId      = 1,

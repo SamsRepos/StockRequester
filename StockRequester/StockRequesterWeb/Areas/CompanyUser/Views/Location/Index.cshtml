@@ -60,11 +60,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var obj in Model.TransferRequestsFromThisOrigin.OrderBy(u => u.Item))
+        @foreach (var obj in Model.TransferRequestsFromThisOrigin.OrderBy(u => u.ItemBlob))
         {
             <tr>
                 <td class="text-white">
-                    @obj.Item
+                    @obj.ItemBlob
                 </td>
                 <td class="text-white">
                     @obj.Quantity
@@ -146,11 +146,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var obj in Model.TransferRequestsToThisDestination.OrderBy(u => u.Item))
+        @foreach (var obj in Model.TransferRequestsToThisDestination.OrderBy(u => u.ItemBlob))
         {
             <tr>
                 <td class="text-white">
-                    @obj.Item
+                    @obj.ItemBlob
                 </td>
                 <td class="text-white">
                     @obj.Quantity

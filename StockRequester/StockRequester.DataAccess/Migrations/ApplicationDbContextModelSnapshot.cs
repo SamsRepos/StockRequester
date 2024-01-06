@@ -361,7 +361,7 @@ namespace StockRequester.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<string>("Item")
+                    b.Property<string>("ItemBlob")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -396,7 +396,7 @@ namespace StockRequester.DataAccess.Migrations
                             Id = 1,
                             CompanyId = 1,
                             DestinationLocationId = 2,
-                            Item = "Harry Potter",
+                            ItemBlob = "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}",
                             OriginLocationId = 1,
                             Quantity = 10,
                             StatusId = 1

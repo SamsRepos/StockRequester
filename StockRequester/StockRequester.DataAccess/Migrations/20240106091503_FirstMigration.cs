@@ -240,7 +240,7 @@ namespace StockRequester.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    Item = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ItemBlob = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     DestinationLocationId = table.Column<int>(type: "int", nullable: false),
                     OriginLocationId = table.Column<int>(type: "int", nullable: false),
@@ -302,8 +302,8 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "TransferRequests",
-                columns: new[] { "Id", "CompanyId", "DestinationLocationId", "Item", "MiscNotes", "OriginLocationId", "Quantity", "StatusId" },
-                values: new object[] { 1, 1, 2, "Harry Potter", null, 1, 10, 1 });
+                columns: new[] { "Id", "CompanyId", "DestinationLocationId", "ItemBlob", "MiscNotes", "OriginLocationId", "Quantity", "StatusId" },
+                values: new object[] { 1, 1, 2, "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}", null, 1, 10, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

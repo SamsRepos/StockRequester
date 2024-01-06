@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -40,13 +42,8 @@ namespace StockRequester.Models
         //[ForeignKey(nameof(RequestingUserId))]
         //public ApplicationUser RequestingUser { get; set; }
 
-        //
-        //
-        //
+        [Required] public string ItemBlob { get; set; }
 
-        [Required] public string Item { get; set; }
-        //[Required] public Item Item {  get; set; }
-        
         [Required]
         [Range(1, 10000)]
         public int Quantity { get; set; }

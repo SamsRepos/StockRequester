@@ -1,12 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace StockRequester.Models
 {
-    // stock/inventory item
     public class Item
     {
-        [Key] public int Id { get; set; }
-        [Required] public string Name { get; set; }
+        public static Item BlobToItem(string blob)
+        {
+            return JsonConvert.DeserializeObject<Item>(blob);
+        }
+
+        public static string ItemToBlob(Item item)
+        {
+            return JsonConvert.SerializeObject(item);
+        }
+
+        public string ToBlob()
+        {
+            return ItemToBlob(this);
+        }
+
+        public string Name { get; set; }
         public string Description { get; set; }
     }
 }
