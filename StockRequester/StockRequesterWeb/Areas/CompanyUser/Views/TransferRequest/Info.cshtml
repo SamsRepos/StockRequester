@@ -39,15 +39,22 @@
             </p>
             <hr />
         }
-        
 
-
+    </div>
     @* <div class="card-footer border-white text-muted">
         card footer
     </div> *@
 </div>
 
-
+<div class="row p-1">
+    <div class="col-6 col-md-3">
+        <div class="w-100 btn-group" role="group">
+            @await Html.PartialAsync("_BackButton", Model.BackLocation)
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+    </div>
+</div>
 
 
 

@@ -53,18 +53,7 @@
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-circle"></i> Update Status
                     </button>
-                    @if (Model.BackLocation is null)
-                    {
-                        <a asp-controller="Company" asp-action="Index" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left-circle"></i> Back to Company View
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-controller="Location" asp-action="Index" asp-route-id="@Model.BackLocation.Id" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left-circle"></i> Back to @(Model.BackLocation.Name) Location View
-                        </a>
-                    }
+                    @await Html.PartialAsync("_BackButton", Model.BackLocation)
                 </div>
             </div>
             <div class="col-6 col-md-3">

@@ -1,0 +1,15 @@
+﻿@* _BackButton should be in the context of a btn-group *@
+@model Location? //Back Location. If null, return to company view
+
+@if (Model is null)
+{
+    <a asp-controller="Company" asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left-circle"></i> Back to Company View
+    </a>
+}
+else
+{
+    <a asp-controller="Location" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-secondary">
+        <i class="bi bi-arrow-left-circle"></i> Back to @(Model.Name) Location View
+    </a>
+}
