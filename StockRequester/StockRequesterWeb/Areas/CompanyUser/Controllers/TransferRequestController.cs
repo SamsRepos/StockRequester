@@ -157,7 +157,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         {
             TransferRequest? tr = _unitOfWork.TransferRequest.Get(
                 (u => u.Id == id),
-                includeProperties: nameof(TransferRequest.Status)
+                includeProperties: $"{nameof(TransferRequest.Status)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)}"
             );
 
             if(tr is null || !CurrentUserHasAccess(tr)) return NotFound();

@@ -4,6 +4,17 @@
     ViewData["Title"] = "Update Status";
 }
 
+@await Html.PartialAsync(
+    "../TransferRequest/_TransferRequestsTable.cshtml", 
+    new TrTableViewModel
+    {
+        TransferRequests = new List<TransferRequest>{ Model.TransferRequest },
+        TableOptions = TrTableOptions.ForUpdateStatusView()
+    }
+)
+
+<hr/>
+
 <form method="post">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
