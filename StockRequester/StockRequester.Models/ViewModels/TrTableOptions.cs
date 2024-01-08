@@ -18,6 +18,19 @@ namespace StockRequester.Models.ViewModels
 
         public bool ActionButtonsVisible {  get; set; }
 
+        private bool _viewInfoButtonVisible;
+        public bool ViewInfoButtonVisible
+        {
+            get
+            {
+                return _viewInfoButtonVisible && ActionButtonsVisible;
+            }
+            set
+            {
+                _viewInfoButtonVisible = value;
+            }
+        }
+
         private bool _editDetailsButtonVisible;
         public bool EditDetailsButtonVisible 
         {
@@ -73,6 +86,7 @@ namespace StockRequester.Models.ViewModels
 
                 ActionButtonsVisible = true,
 
+                ViewInfoButtonVisible     = true,
                 EditDetailsButtonVisible  = true,
                 UpdateStatusButtonVisible = true,
                 ArchiveButtonVisble       = true,
@@ -95,6 +109,7 @@ namespace StockRequester.Models.ViewModels
 
                 ActionButtonsVisible = false,
 
+                ViewInfoButtonVisible     = false,
                 EditDetailsButtonVisible  = false,
                 UpdateStatusButtonVisible = false,
                 ArchiveButtonVisble       = false,
@@ -117,6 +132,7 @@ namespace StockRequester.Models.ViewModels
 
                 ActionButtonsVisible = true,
 
+                ViewInfoButtonVisible     = true,
                 EditDetailsButtonVisible  = true,
                 UpdateStatusButtonVisible = true,
                 ArchiveButtonVisble       = true,

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StockRequester.Models.ViewModels
 {
-    public class TransferRequestViewModel
+    public class TrUpsertViewModel
     {
         public TransferRequest TransferRequest { get; set; }
         public Item Item { get; set; }

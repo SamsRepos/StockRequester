@@ -20,6 +20,25 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         {
         }
 
+        public IActionResult Info(int id, int? backLocationId)
+        {
+            TransferRequest? tr = _unitOfWork.TransferRequest.Get(
+                (u => u.Id == id),
+                includeProperties: $"{nameof(TransferRequest.Status)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)}"
+            );
+
+            if (tr is null || !CurrentUserHasAccess(tr)) return NotFound();
+
+            TrInfoViewModel vm = new TrInfoViewModel
+            {
+                TransferRequest = tr,
+                Item = tr.GetItem(),
+                BackLocation = backLocationId is not null ? _unitOfWork.Location.Get(u => u.Id == backLocationId) : null
+            };
+
+            return View(vm);
+        }
+
         public IActionResult Upsert(int? id, int? originLocationId, int? destinationLocationId, int? backLocationId)
         {
             int? companyId = CurrentUserCompanyId();
@@ -83,7 +102,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 }
             );
 
-            TransferRequestViewModel trVm = new()
+            TrUpsertViewModel trVm = new()
             {
                 TransferRequest = tr,
                 Item = Item.BlobToItem(tr.ItemBlob),
@@ -95,7 +114,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upsert(TransferRequestViewModel trVm)
+        public IActionResult Upsert(TrUpsertViewModel trVm)
         {
             TransferRequest tr = trVm.TransferRequest;
 
