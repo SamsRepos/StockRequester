@@ -23,11 +23,17 @@
         <input asp-for="TransferRequest.Status.Id" hidden />
 
         <div class="form-floating py-2 col-12">
-            <select asp-for="TransferRequest.Status.Status" asp-items="@Model.StatusesList" class="form-select border-0 shadow">
-                <option disabled selected>--Select Destination Location--</option>
+            <select id="selectStatus" oninput="statusChange(this)" asp-for="TransferRequest.Status.Status" asp-items="@Model.StatusesList" class="form-select border-0 shadow">
+                <option disabled selected>--Select Status--</option>
             </select>
             <label asp-for="TransferRequest.Status.Status" class="ms-2 text-black"></label>
             <span asp-validation-for="TransferRequest.Status.Status" class="text-danger"></span>
+        </div>
+
+        <div class="py-2 col-12" id="trackingInfo">
+            <label asp-for="TransferRequest.Status.TrackingInfo" class="p-0"></label>
+            <input asp-for="TransferRequest.Status.TrackingInfo" type="text" class="form-control" />
+            <span asp-validation-for="TransferRequest.Status.TrackingInfo" class="text-danger"></span>
         </div>
 
         <div class="row p-1">
@@ -55,28 +61,11 @@
         </div>
 
     </div>
+
 </form>
 
-
 @section Scripts {
-    <script>
-        tinymce.init({
-            selector: 'textarea',
-            menubar: ''
-                    plugins: 'powerpaste tinymcespellchecker',
-            toolbar: 'undo redo | bold italic underline strikethrough | emoticons charmap | removeformat',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            mergetags_list: [
-                { value: 'First.Name', title: 'First Name' },
-                { value: 'Email', title: 'Email' },
-            ],
-            // ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-        });
-    </script>
-    @* <textarea>
-      Welcome to TinyMCE!
-    </textarea> *@
+    <script src="~/js/statusSelect.js" asp-append-version="true"></script>
     @{
         <partial name="_ValidationScriptsPartial" />
     }

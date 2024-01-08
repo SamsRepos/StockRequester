@@ -1,6 +1,7 @@
 ﻿using StockRequester.Utility;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -19,6 +20,9 @@ namespace StockRequester.Models
         {
             return ((Status == SD.RequestStatus_Fulfilled) || (Status == SD.RequestStatus_Cancelled));
         }
+
+        [DisplayName("Tracking Info (Optional)")]
+        public string? TrackingInfo {  get; set; }
 
         // - Pending, by Destination
         //    - Ability for Origin to reply e.g. "we have these books but they are not signed, do you still want them?" 
