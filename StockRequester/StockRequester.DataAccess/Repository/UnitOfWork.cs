@@ -1,5 +1,6 @@
 ﻿using StockRequester.DataAccess.Data;
 using StockRequester.DataAccess.Repository.IRepository;
+using StockRequester.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,22 +12,22 @@ namespace StockRequester.DataAccess.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private ApplicationDbContext _db;
-        public ICompanyRepository Company { get; private set; }
-        public ILocationRepository Location { get; private set; }
-        public ITransferRequestRepository TransferRequest { get; private set; }
-        public IApplicationUserRepository ApplicationUser { get; private set; }
-        public IInvitedEmailRepository InvitedEmail { get; private set; }
-        public IRequestStatusRepository RequestStatus { get; private set; }
+        public IRepository<Company> Company { get; private set; }
+        public IRepository<Location> Location { get; private set; }
+        public IRepository<TransferRequest> TransferRequest { get; private set; }
+        public IRepository<ApplicationUser> ApplicationUser { get; private set; }
+        public IRepository<InvitedEmail> InvitedEmail { get; private set; }
+        public IRepository<RequestStatus> RequestStatus { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
-            Company = new CompanyRepository(_db);
-            Location = new LocationRepository(_db);
-            TransferRequest = new TransferRequestRepository(_db);
-            ApplicationUser = new ApplicationUserRepository(_db);
-            InvitedEmail = new InvitedEmailRepository(_db);
-            RequestStatus = new RequestStatusRepository(_db);
+            Company         = new Repository<Company>(_db);
+            Location        = new Repository<Location>(_db);
+            TransferRequest = new Repository<TransferRequest>(_db);
+            ApplicationUser = new Repository<ApplicationUser>(_db);
+            InvitedEmail    = new Repository<InvitedEmail>(_db);
+            RequestStatus   = new Repository<RequestStatus>(_db);
         }
         public void Save()
         {
