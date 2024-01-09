@@ -105,6 +105,7 @@ namespace StockRequester.Models
         [DisplayName("Miscellaneous Notes")]
         public string? MiscNotes { get; set; }
 
-        
+        [Required]
+        public bool Archived { get; set; }
     }
 }

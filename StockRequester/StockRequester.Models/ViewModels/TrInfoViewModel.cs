@@ -11,5 +11,10 @@ namespace StockRequester.Models.ViewModels
         public TransferRequest TransferRequest { get; set; }
         public Item Item { get; set; }
         public Location? BackLocation { get; set; }
+
+        public int? GetBackLocationId()
+        {
+            return (BackLocation is not null) ? BackLocation.Id : null;
+        }
     }
 }

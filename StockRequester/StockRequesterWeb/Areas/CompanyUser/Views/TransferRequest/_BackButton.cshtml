@@ -3,13 +3,13 @@
 
 @if (Model is null)
 {
-    <a asp-controller="Company" asp-action="Index" class="btn btn-secondary">
+    <a asp-controller="Company" asp-action="Index" class="btn btn-secondary mx-2">
         <i class="bi bi-arrow-left-circle"></i> Back to Company View
     </a>
 }
 else
 {
-    <a asp-controller="Location" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-secondary">
+    <a asp-controller="Location" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-secondary mx-2">
         <i class="bi bi-arrow-left-circle"></i> Back to @(Model.Name) Location View
     </a>
 }

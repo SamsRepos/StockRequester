@@ -72,7 +72,9 @@ namespace StockRequester.Models.ViewModels
 
         public int? BackLocationId {  get; set; }
 
-        public static TrTableOptions ForCompanyView()
+        public bool IsArchivedView {  get; set; }
+
+        public static TrTableOptions ForCompanyView(bool isArchivedView = false)
         {
             return new TrTableOptions()
             {
@@ -91,11 +93,13 @@ namespace StockRequester.Models.ViewModels
                 UpdateStatusButtonVisible = true,
                 ArchiveButtonVisble       = true,
 
-                BackLocationId = null
+                BackLocationId = null,
+
+                IsArchivedView = isArchivedView
             };
         }
             
-        public static TrTableOptions ForUpdateStatusView()
+        public static TrTableOptions ForUpdateStatusView(bool isArchivedView = false)
         {
             return new TrTableOptions()
             {
@@ -114,11 +118,13 @@ namespace StockRequester.Models.ViewModels
                 UpdateStatusButtonVisible = false,
                 ArchiveButtonVisble       = false,
 
-                BackLocationId = null
+                BackLocationId = null,
+
+                IsArchivedView = isArchivedView
             };
         }
 
-        public static TrTableOptions ForLocationView(int backLocationId)
+        public static TrTableOptions ForLocationView(int backLocationId, bool isArchivedView = false)
         {
             return new TrTableOptions()
             {
@@ -137,7 +143,9 @@ namespace StockRequester.Models.ViewModels
                 UpdateStatusButtonVisible = true,
                 ArchiveButtonVisble       = true,
 
-                BackLocationId = backLocationId
+                BackLocationId = backLocationId,
+
+                IsArchivedView = false
             };
         }
     }
