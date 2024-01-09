@@ -6,7 +6,7 @@
 
 
 <div class="card mb-2 border-white text-white">
-    <h2 class="card-header border-white">@Model.Item.Name</h2>
+    <h2 class="card-header border-white">@Model.Item.Name <b>@(Model.TransferRequest.Archived ? "(Archived)" : "")</b></h2>
     <div class="card-body border-white">
         @if (!string.IsNullOrWhiteSpace(Model.Item.Description))
         {
@@ -62,23 +62,40 @@
 <div class="row p-1">
     <div class="col-12 col-md-6">
         <div class="w-100 btn-group" role="group">
-
-            <a asp-controller="TransferRequest" asp-action="Upsert" asp-route-id="@Model.TransferRequest.Id" asp-route-backLocationId="@Model.GetBackLocationId()" class="btn btn-primary mx-2">
-                <i class="bi bi-pencil"></i> Edit Details
-            </a>
-
-            <a asp-controller="TransferRequest" asp-action="UpdateStatus" asp-route-id="@Model.TransferRequest.Id" asp-route-backLocationId="@Model.GetBackLocationId()" class="btn btn-primary mx-2">
-                <i class="bi bi-pencil"></i> Update Status
-            </a>
-
-            @if (Model.TransferRequest.Status.CanBeArchived())
+            
+            @if (!Model.TransferRequest.Archived)
             {
-                <a asp-controller="TransferRequest" asp-action="Archive" asp-route-id="@Model.TransferRequest.Id" asp-route-backLocationId="@Model.GetBackLocationId()" class="btn btn-danger mx-2">
-                    <i class="bi bi-archive"></i> Archive
+                <a asp-controller="TransferRequest" asp-action="Upsert" asp-route-id="@Model.TransferRequest.Id" asp-route-backLocationId="@Model.GetBackLocationId()" class="btn btn-primary mx-2">
+                    <i class="bi bi-pencil"></i> Edit Details
+                </a>
+
+                <a asp-controller="TransferRequest" asp-action="UpdateStatus" asp-route-id="@Model.TransferRequest.Id" asp-route-backLocationId="@Model.GetBackLocationId()" class="btn btn-primary mx-2">
+                    <i class="bi bi-pencil"></i> Update Status
+                </a>
+
+                @if (Model.TransferRequest.Status.CanBeArchived())
+                {
+                    <a asp-controller="TransferRequest" asp-action="Archive" asp-route-id="@Model.TransferRequest.Id" asp-route-backLocationId="@Model.GetBackLocationId()" class="btn btn-danger mx-2">
+                        <i class="bi bi-archive"></i> Archive
+                    </a>
+                }
+
+                @await Html.PartialAsync("_BackButton", Model.BackLocation)
+            }
+            else //archived:
+            {
+                <a asp-controller="TransferRequest" asp-action="Archive" asp-route-id="@Model.TransferRequest.Id" asp-route-backLocationId="@Model.GetBackLocationId()" class="btn btn-warning mx-2">
+                    <i class="bi bi-reply"></i> Restore Request
+                </a>
+                @* <a asp-controller="Company" asp-action="ArchivedIndex" asp-route-id="@Model.TransferRequest.Id" asp-route-backLocationId="@Model.GetBackLocationId()" class="btn btn-primary mx-2">
+                </a> *@
+
+                <a asp-controller="Company" asp-action="ArchivedIndex" class="btn btn-secondary mx-2">
+                    <i class="bi bi-arrow-left-circle"></i> Back to Archived Requests
                 </a>
             }
 
-            @await Html.PartialAsync("_BackButton", Model.BackLocation)
+
         </div>
     </div>
 </div>

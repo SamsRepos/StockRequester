@@ -320,11 +320,11 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return RedirectToPage($"/Identity/Account/AccessDenied");
             }
 
-            trFromDb.Archived = true;
+            trFromDb.Archived = !trFromDb.Archived;
 
             _unitOfWork.TransferRequest.Update(trFromDb);
             _unitOfWork.Save();
-            TempData["success"] = $"Transfer Request archived successfully";
+            TempData["success"] = $"Transfer Request {(trFromDb.Archived ? "archived" : "restored")} successfully";
 
             if (vm.BackLocation is null)
             {

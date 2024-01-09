@@ -74,7 +74,7 @@ namespace StockRequester.Models.ViewModels
 
         public bool IsArchivedView {  get; set; }
 
-        public static TrTableOptions ForCompanyView(bool isArchivedView = false)
+        public static TrTableOptions ForCompanyView()
         {
             return new TrTableOptions()
             {
@@ -95,10 +95,10 @@ namespace StockRequester.Models.ViewModels
 
                 BackLocationId = null,
 
-                IsArchivedView = isArchivedView
+                IsArchivedView = false
             };
         }
-            
+
         public static TrTableOptions ForUpdateStatusView()
         {
             return new TrTableOptions()
@@ -124,7 +124,7 @@ namespace StockRequester.Models.ViewModels
             };
         }
 
-        public static TrTableOptions ForLocationView(int backLocationId, bool isArchivedView = false)
+        public static TrTableOptions ForLocationView(int backLocationId)
         {
             return new TrTableOptions()
             {
@@ -145,11 +145,11 @@ namespace StockRequester.Models.ViewModels
 
                 BackLocationId = backLocationId,
 
-                IsArchivedView = isArchivedView
+                IsArchivedView = false
             };
         }
 
-        public static TrTableOptions ForArchiveView()
+        public static TrTableOptions ForArchiveView(bool isArchivedView)
         {
             return new TrTableOptions()
             {
@@ -168,9 +168,33 @@ namespace StockRequester.Models.ViewModels
                 UpdateStatusButtonVisible = false,
                 ArchiveButtonVisble       = false,
 
-                IsArchivedView = false
+                IsArchivedView = isArchivedView
             };
         }
-        
+
+        public static TrTableOptions ForArchivedView(int? backLocationId = null)
+        {
+            return new TrTableOptions()
+            {
+                ItemNameVisible            = true,
+                ItemDescriptionVisible     = false,
+                QuantityVisible            = true,
+                OriginLocationVisible      = true,
+                DestinationLocationVisible = true,
+                StatusVisible              = true,
+                MiscNotesVisible           = false,
+
+                ActionButtonsVisible = true,
+
+                ViewInfoButtonVisible     = true,
+                EditDetailsButtonVisible  = false,
+                UpdateStatusButtonVisible = false,
+                ArchiveButtonVisble       = false,
+
+                BackLocationId = backLocationId,
+
+                IsArchivedView = true
+            };
+        }
     }
 }

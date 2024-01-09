@@ -157,5 +157,27 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult ArchivedIndex()
+        {
+            int? companyId = CurrentUserCompanyId();
+
+            if (companyId is null || companyId == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            Company companyFromDb = _unitOfWork.Company.Get(
+                u => u.Id == companyId,
+                includeProperties: $"{nameof(Company.TransferRequests)},{nameof(Company.Locations)},{nameof(Company.Users)}"
+            );
+
+            foreach (TransferRequest tr in companyFromDb.TransferRequests)
+            {
+                tr.Status = _unitOfWork.RequestStatus.Get(u => u.Id == tr.StatusId);
+            }
+
+            return View(companyFromDb);
+        }
     }
 }

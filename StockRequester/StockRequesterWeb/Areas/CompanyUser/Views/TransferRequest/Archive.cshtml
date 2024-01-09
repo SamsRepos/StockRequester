@@ -9,7 +9,7 @@
     new TrTableViewModel
     {
         TransferRequests = new List<TransferRequest> { Model.TransferRequest },
-        TableOptions = TrTableOptions.ForArchiveView()
+        TableOptions = TrTableOptions.ForArchiveView(isArchivedView: Model.TransferRequest.Archived)
     }
 )
 
@@ -19,7 +19,7 @@
     <div class="card-header bg-gradient m-lg-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-primary py-2">Archive Transfer Request</h2>
+                <h2 class="text-primary py-2">@(Model.TransferRequest.Archived ? "Restore" : "Archive") Transfer Request</h2>
             </div>
         </div>
         <div class="card-body p-4">
@@ -45,20 +45,28 @@
                     <input asp-for="@Model.BackLocation.Name" hidden />
                 }
 
-                <div class="border p-3 mt-4">
-
+                
                     <div class="row p-1">
                         <div class="col-12 col-md-6">
                             <div class="w-100 btn-group" role="group">
-                                <button type="submit" class="btn btn-danger form-control">
-                                    <i class="bi bi-trash3"></i> Archive Now
-                                </button>
+                                @if(Model.TransferRequest.Archived)
+                                {
+                                    <button type="submit" class="btn btn-warning  form-control">
+                                        <i class="bi bi-reply"></i> Restore Now
+                                    </button>
+                                }
+                                else // to be archived
+                                {
+                                    <button type="submit" class="btn btn-danger form-control">
+                                        <i class="bi bi-trash3"></i> Archive Now
+                                    </button>
+                                }
                                 @await Html.PartialAsync("_BackButton", Model.BackLocation)
                             </div>
                         </div>
                     </div>
 
-                </div>
+                
 
             </form>
         </div>
