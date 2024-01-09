@@ -7,4 +7,7 @@ function statusChange() {
     
     var trackingDiv = document.getElementById("trackingInfo");
     trackingDiv.style.display = (status === "Sent") ? "block" : "none";
+
+    var cancellationDiv = document.getElementById("cancellationReason");
+    cancellationDiv.style.display = (status === "Cancelled") ? "block" : "none";
 }

@@ -47,6 +47,12 @@
             <span asp-validation-for="TransferRequest.Status.TrackingInfo" class="text-danger"></span>
         </div>
 
+        <div class="py-2 col-12" id="cancellationReason">
+            <label asp-for="TransferRequest.Status.CancellationReason" class="p-0"></label>
+            <input asp-for="TransferRequest.Status.CancellationReason" type="text" required class="form-control" />
+            <span asp-validation-for="TransferRequest.Status.CancellationReason" class="text-danger"></span>
+        </div>
+
         <div class="row p-1">
             <div class="col-6 col-md-3">
                 <div class="w-100 btn-group" role="group">

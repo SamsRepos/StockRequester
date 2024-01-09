@@ -31,7 +31,11 @@
         <h3 class="card-title">Request Status: @Model.TransferRequest.Status.Status</h3>
         @if(!string.IsNullOrEmpty(Model.TransferRequest.Status.TrackingInfo))
         {
-            <p class="card-text">Tracking Info: @Model.TransferRequest.Status.TrackingInfo</p>
+            <p class="card-text" style="display:inline">Tracking Info: @Model.TransferRequest.Status.TrackingInfo<br /></p>
+        }
+        @if (!string.IsNullOrEmpty(Model.TransferRequest.Status.CancellationReason))
+        {
+            <p class="card-text" style="display:inline">CancellationReason: @Model.TransferRequest.Status.CancellationReason<br /></p>
         }
         <hr />
     

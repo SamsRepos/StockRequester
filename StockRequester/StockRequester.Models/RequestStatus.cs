@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace StockRequester.Models
 {
+
+    
+
+
     public class RequestStatus
     {
         [Key] public int Id { get; set; }
@@ -24,12 +28,8 @@ namespace StockRequester.Models
         [DisplayName("Tracking Info (Optional)")]
         public string? TrackingInfo {  get; set; }
 
-        // - Pending, by Destination
-        //    - Ability for Origin to reply e.g. "we have these books but they are not signed, do you still want them?" 
-        // - On stock transfer shelf, by Origin
-        // - Sent(can add deliver tracking numbers), by Origin
-        // - Cancelled (must give reason) therefore archived, by either Origin or Destination
-        // - Fulfilled therefore archived, by Destination
+        [DisplayName("Cancellation Reason (Required)")]
+        public string? CancellationReason { get; set; }
 
     }
 }
