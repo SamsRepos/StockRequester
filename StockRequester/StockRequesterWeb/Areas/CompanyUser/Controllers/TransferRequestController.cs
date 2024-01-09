@@ -25,7 +25,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         {
             TransferRequest? tr = _unitOfWork.TransferRequest.Get(
                 (u => u.Id == id),
-                includeProperties: $"{nameof(TransferRequest.Status)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)}"
+                includeProperties: $"{nameof(TransferRequest.Status)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)},{nameof(TransferRequest.CreatedByUser)}"
             );
 
             if (tr is null || !CurrentUserHasAccess(tr)) return NotFound();
@@ -171,6 +171,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 }
 
                 tr.StatusId = rs.Id;
+                tr.CreatedByUserId = CurrentApplicationUser()?.Id;
                 _unitOfWork.TransferRequest.Add(tr);
                 _unitOfWork.Save();
             }

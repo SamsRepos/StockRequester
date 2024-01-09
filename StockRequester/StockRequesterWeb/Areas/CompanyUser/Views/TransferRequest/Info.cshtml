@@ -22,6 +22,10 @@
             <hr />
         }
         
+        <h3 class="card-title">Associated Users</h3>
+        <p class="card-subtitle">Request Created By: @(Model.TransferRequest.CreatedByUser is not null ? $"{Model.TransferRequest.CreatedByUser.Name}, {Model.TransferRequest.CreatedByUser.Email}" : "<User Not Found>")</p>
+        <hr />
+
         <h3 class="card-title">Request Details</h3>
         <p class="card-subtitle">Quantity: @Model.TransferRequest.Quantity</p>
         <p class="card-subtitle">From Origin: @(Model.TransferRequest.OriginLocation.Name)</p>

@@ -32,15 +32,24 @@ namespace StockRequester.Models
         public Company Company { get; set; }
 
         //
-        // Requesting User:
+        // Created By User:
+        //
+        
+        public string? CreatedByUserId { get; set; }
+
+        [ValidateNever]
+        [ForeignKey(nameof(CreatedByUserId))]
+        public ApplicationUser? CreatedByUser { get; set; }
+
+        //
+        // Edited By Users:
         //
 
-        //[Required]
-        //public int RequestingUserId { get; set; }
+        
 
-        //[ValidateNever]
-        //[ForeignKey(nameof(RequestingUserId))]
-        //public ApplicationUser RequestingUser { get; set; }
+        //
+        //
+        //
 
         [ValidateNever]
         [Required] 

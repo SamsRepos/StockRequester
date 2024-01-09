@@ -54,7 +54,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var obj in Model.TransferRequests.OrderBy(u => u.GetItem().Name).Where(u=>u.Archived==Model.TableOptions.IsArchivedView))
+        @foreach (var obj in Model.TransferRequests.Where(u => u.Archived == Model.TableOptions.IsArchivedView).OrderBy(u => u.GetItem().Name))
         {
             <tr>
                 @if(Model.TableOptions.ItemNameVisible)
