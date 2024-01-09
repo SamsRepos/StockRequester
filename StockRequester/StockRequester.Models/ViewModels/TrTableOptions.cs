@@ -99,7 +99,7 @@ namespace StockRequester.Models.ViewModels
             };
         }
             
-        public static TrTableOptions ForUpdateStatusView(bool isArchivedView = false)
+        public static TrTableOptions ForUpdateStatusView()
         {
             return new TrTableOptions()
             {
@@ -120,7 +120,7 @@ namespace StockRequester.Models.ViewModels
 
                 BackLocationId = null,
 
-                IsArchivedView = isArchivedView
+                IsArchivedView = false
             };
         }
 
@@ -145,8 +145,32 @@ namespace StockRequester.Models.ViewModels
 
                 BackLocationId = backLocationId,
 
+                IsArchivedView = isArchivedView
+            };
+        }
+
+        public static TrTableOptions ForArchiveView()
+        {
+            return new TrTableOptions()
+            {
+                ItemNameVisible            = true,
+                ItemDescriptionVisible     = false,
+                QuantityVisible            = true,
+                OriginLocationVisible      = true,
+                DestinationLocationVisible = true,
+                StatusVisible              = true,
+                MiscNotesVisible           = false,
+
+                ActionButtonsVisible = false,
+
+                ViewInfoButtonVisible     = false,
+                EditDetailsButtonVisible  = false,
+                UpdateStatusButtonVisible = false,
+                ArchiveButtonVisble       = false,
+
                 IsArchivedView = false
             };
         }
+        
     }
 }

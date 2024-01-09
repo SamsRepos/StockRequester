@@ -19,6 +19,8 @@
         <input asp-for="TransferRequest.StatusId" hidden />
         <input asp-for="TransferRequest.Status" hidden />
         <input asp-for="TransferRequest.ItemBlob" hidden />
+        <input asp-for="TransferRequest.Archived" hidden />
+
         @if (Model.BackLocation != null)
         {
             <input asp-for="@Model.BackLocation.Id" hidden />

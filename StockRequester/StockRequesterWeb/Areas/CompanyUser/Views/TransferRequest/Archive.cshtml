@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Archive Transfer Request";
+}
+
+@model TrViewModel
+
+@await Html.PartialAsync(
+    "../TransferRequest/_TransferRequestsTable.cshtml",
+    new TrTableViewModel
+    {
+        TransferRequests = new List<TransferRequest> { Model.TransferRequest },
+        TableOptions = TrTableOptions.ForArchiveView()
+    }
+)
+
+<hr />
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-primary py-2">Archive Transfer Request</h2>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <form method="post">
+                <input asp-for="TransferRequest.Id" hidden />
+                <input asp-for="TransferRequest.Quantity" hidden />
+                <input asp-for="TransferRequest.CompanyId" hidden />
+                <input asp-for="TransferRequest.StatusId" hidden />
+                <input asp-for="TransferRequest.Status" hidden />
+                <input asp-for="TransferRequest.OriginLocationId" hidden />
+                <input asp-for="TransferRequest.OriginLocation" hidden />
+                <input asp-for="TransferRequest.OriginLocation.Id" hidden />
+                <input asp-for="TransferRequest.OriginLocation.Name" hidden />
+                <input asp-for="TransferRequest.DestinationLocationId" hidden />
+                <input asp-for="TransferRequest.DestinationLocation" hidden />
+                <input asp-for="TransferRequest.DestinationLocation.Id" hidden />
+                <input asp-for="TransferRequest.DestinationLocation.Name" hidden />
+                <input asp-for="Item.Name" hidden />
+                <input asp-for="Item.Description" hidden />
+                @if (Model.BackLocation != null)
+                {
+                    <input asp-for="@Model.BackLocation.Id" hidden />
+                    <input asp-for="@Model.BackLocation.Name" hidden />
+                }
+
+                <div class="border p-3 mt-4">
+
+                    <div class="row p-1">
+                        <div class="col-12 col-md-6">
+                            <div class="w-100 btn-group" role="group">
+                                <button type="submit" class="btn btn-danger form-control">
+                                    <i class="bi bi-trash3"></i> Archive Now
+                                </button>
+                                @await Html.PartialAsync("_BackButton", Model.BackLocation)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

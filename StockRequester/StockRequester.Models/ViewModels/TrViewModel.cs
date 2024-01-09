@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StockRequester.Models.ViewModels
 {
-    public class TrInfoViewModel
+    public class TrViewModel
     {
         public TransferRequest TransferRequest { get; set; }
         public Item Item { get; set; }
