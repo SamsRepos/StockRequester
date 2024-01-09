@@ -152,7 +152,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
             bool trAlreadyExists = !(tr.Id == 0);
 
-            if (trAlreadyExists)
+            if (trAlreadyExists) // update
             {
                 if (!CurrentUserHasAccess(tr)) return RedirectToPage($"/Identity/Account/AccessDenied");
 
@@ -165,7 +165,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 _unitOfWork.TransferRequest.Update(tr);
                 _unitOfWork.Save();
             }
-            else
+            else // insert
             {
                 RequestStatus rs = new RequestStatus
                 {
@@ -242,6 +242,15 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             }
 
             if (!CurrentUserHasAccess(vm.TransferRequest)) return NotFound();
+
+            string? currentUserId = CurrentApplicationUser()?.Id;
+            TransferRequest trFromDb = _unitOfWork.TransferRequest.Get(u => u.Id == vm.TransferRequest.Id);
+            if (currentUserId is not null && !(trFromDb.GetStatusChangedByUsersIds().Contains(currentUserId)))
+            {
+                trFromDb.AddStatusChangedByUserId(currentUserId);
+                _unitOfWork.TransferRequest.Update(trFromDb);
+                _unitOfWork.Save();
+            }
 
             _unitOfWork.RequestStatus.Update(vm.TransferRequest.Status);
             _unitOfWork.Save();

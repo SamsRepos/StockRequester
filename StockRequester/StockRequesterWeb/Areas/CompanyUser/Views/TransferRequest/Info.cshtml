@@ -34,6 +34,14 @@
             }
         }
         
+        @if(Model.TransferRequest.GetStatusChangedByUsersIds().Count > 0)
+        {
+            <p class="card-subtitle">Status Updated By:</p>
+            @foreach (string id in Model.TransferRequest.GetStatusChangedByUsersIds())
+            {
+                <p class="card-subtitle">- @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Name), @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Email)</p>
+            }
+        }
             
         <hr />
 

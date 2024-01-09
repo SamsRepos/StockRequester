@@ -36,7 +36,7 @@ namespace StockRequester.Models
         // Edited By Users:
         //
 
-        public string? EditedByUsersBlob {  get; set; }
+        public string? EditedByUsersIdsBlob {  get; set; }
 
         private static List<string> BlobToIdsList(string? blob)
         {
@@ -51,7 +51,7 @@ namespace StockRequester.Models
 
         public List<string> GetEditedByUsersIds()
         {
-            return BlobToIdsList(EditedByUsersBlob);
+            return BlobToIdsList(EditedByUsersIdsBlob);
         }
 
         public void AddEditedByUserId(string userId)
@@ -62,12 +62,34 @@ namespace StockRequester.Models
 
             userIds.Add(userId);
 
-            EditedByUsersBlob = IdsListToBlob(userIds);
+            EditedByUsersIdsBlob = IdsListToBlob(userIds);
         }
 
 
         //
+        // Status Changed By Users:
         //
+
+        public string? StatusChangedByUsersIdsBlob { get; set; }
+
+        public List<string> GetStatusChangedByUsersIds()
+        {
+            return BlobToIdsList(StatusChangedByUsersIdsBlob);
+        }
+
+        public void AddStatusChangedByUserId(string userId)
+        {
+            List<string> userIds = GetStatusChangedByUsersIds();
+
+            if (userIds.Contains(userId)) return;
+
+            userIds.Add(userId);
+
+            StatusChangedByUsersIdsBlob = IdsListToBlob(userIds);
+        }
+
+        //
+        // Item:
         //
 
         [ValidateNever]

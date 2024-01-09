@@ -20,7 +20,8 @@
         <input asp-for="TransferRequest.Status" hidden />
         <input asp-for="TransferRequest.Archived" hidden />
         <input asp-for="TransferRequest.CreatedByUserId" hidden />
-        <input asp-for="TransferRequest.EditedByUsersBlob" hidden />
+        <input asp-for="TransferRequest.EditedByUsersIdsBlob" hidden />
+        <input asp-for="TransferRequest.StatusChangedByUsersIdsBlob" hidden />
 
 
         @if (Model.BackLocation != null)
