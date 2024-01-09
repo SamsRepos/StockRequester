@@ -30,6 +30,7 @@ namespace StockRequester.Models
 
         [ValidateNever]
         [ForeignKey(nameof(CreatedByUserId))]
+        
         public ApplicationUser? CreatedByUser { get; set; }
 
         //

@@ -15,7 +15,7 @@ namespace StockRequester.Models
         [Required] public string Name { get; set; }
 
         //
-        // COMPANY:
+        // Company:
         //
 
         public int? CompanyId { get; set; }
@@ -29,9 +29,5 @@ namespace StockRequester.Models
         //
         //
 
-        // associated location
-        //   ... (easily changable.
-        //   ... Maybe in navbar on right, location name.
-        //   ... Click for drop-down "--Change Location--")
     }
 }

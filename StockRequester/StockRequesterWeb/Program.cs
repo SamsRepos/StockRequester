@@ -17,6 +17,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(connectionString)
 );
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 // to confirm emails: builder.Services.Add Default??? Identity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 // AddDefaultIdentity() doesn't expect a role:
 //builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
@@ -35,10 +39,6 @@ builder.Services.ConfigureApplicationCookie(
 );
 
 builder.Services.AddRazorPages();
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 

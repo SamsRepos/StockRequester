@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using StockRequester.DataAccess.Repository;
+using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 
 namespace StockRequesterWeb.Areas.Identity.Pages.Account.Manage
@@ -17,13 +19,17 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUnitOfWork _unitOfWork;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IUnitOfWork unitOfWork
+        )
         {
-            _userManager = userManager;
+            _userManager   = userManager;
             _signInManager = signInManager;
+            _unitOfWork    = unitOfWork;
         }
 
         /// <summary>
@@ -52,25 +58,20 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            [Display(Name = "Name")]
+            public string Name { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var name     = user.Name;
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                Name = name
             };
         }
 
@@ -100,15 +101,20 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            var name = user.Name;
+            if (Input.Name != name)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
-                }
+                //var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+                //if (!setPhoneResult.Succeeded)
+                //{
+                //    StatusMessage = "Unexpected error when trying to set phone number.";
+                //    return RedirectToPage();
+                //}
+
+                ApplicationUser userFromDb = _unitOfWork.ApplicationUser.Get(u => u.Id == user.Id);
+                userFromDb.Name = Input.Name;
+                _unitOfWork.ApplicationUser.Update(userFromDb);
+                _unitOfWork.Save();
             }
 
             await _signInManager.RefreshSignInAsync(user);
