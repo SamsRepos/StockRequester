@@ -24,6 +24,17 @@
         
         <h3 class="card-title">Associated Users</h3>
         <p class="card-subtitle">Request Created By: @(Model.TransferRequest.CreatedByUser is not null ? $"{Model.TransferRequest.CreatedByUser.Name}, {Model.TransferRequest.CreatedByUser.Email}" : "<User Not Found>")</p>
+
+        @if(Model.TransferRequest.GetEditedByUsersIds().Count > 0)
+        {
+            <p class="card-subtitle">Edited By:</p>
+            @foreach(string id in Model.TransferRequest.GetEditedByUsersIds())
+            {
+                <p class="card-subtitle">- @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Name), @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Email)</p>
+            }
+        }
+        
+            
         <hr />
 
         <h3 class="card-title">Request Details</h3>

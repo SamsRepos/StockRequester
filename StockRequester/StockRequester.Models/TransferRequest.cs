@@ -1,17 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Security.Cryptography.Xml;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StockRequester.Models
 {
@@ -45,7 +36,35 @@ namespace StockRequester.Models
         // Edited By Users:
         //
 
-        
+        public string? EditedByUsersBlob {  get; set; }
+
+        private static List<string> BlobToIdsList(string? blob)
+        {
+            if (blob is null) return new List<string>();
+            return JsonConvert.DeserializeObject<List<string>>(blob);
+        }
+
+        private static string IdsListToBlob(List<string> ids)
+        {
+            return JsonConvert.SerializeObject(ids);
+        }
+
+        public List<string> GetEditedByUsersIds()
+        {
+            return BlobToIdsList(EditedByUsersBlob);
+        }
+
+        public void AddEditedByUserId(string userId)
+        {
+            List<string> userIds = GetEditedByUsersIds();
+            
+            if(userIds.Contains(userId)) return;
+
+            userIds.Add(userId);
+
+            EditedByUsersBlob = IdsListToBlob(userIds);
+        }
+
 
         //
         //
@@ -58,6 +77,11 @@ namespace StockRequester.Models
         public Item GetItem()
         {
             return Item.BlobToItem(ItemBlob);
+        }
+
+        public void SetItem(Item item)
+        {
+            ItemBlob = item.ToBlob();
         }
 
         [Required]

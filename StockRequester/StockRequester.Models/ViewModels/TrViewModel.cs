@@ -16,5 +16,7 @@ namespace StockRequester.Models.ViewModels
         {
             return (BackLocation is not null) ? BackLocation.Id : null;
         }
+
+        public ICollection<ApplicationUser>? AllCompanyUsers { get; set; }
     }
 }

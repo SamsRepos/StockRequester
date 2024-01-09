@@ -8,6 +8,7 @@ using StockRequester.Models;
 using StockRequester.Models.ViewModels;
 using StockRequester.Utility;
 using StockRequesterWeb.Controllers;
+using System.ComponentModel.Design;
 using System.Transactions;
 
 namespace StockRequesterWeb.Areas.CompanyUser.Controllers
@@ -37,7 +38,8 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             {
                 TransferRequest = tr,
                 Item = tr.GetItem(),
-                BackLocation = backLocation
+                BackLocation = backLocation,
+                AllCompanyUsers = _unitOfWork.Company.Get(u => u.Id == CurrentUserCompanyId(), includeProperties: nameof(Company.Users)).Users
             };
 
             return View(vm);
@@ -113,7 +115,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             TrUpsertViewModel trVm = new()
             {
                 TransferRequest = tr,
-                Item = Item.BlobToItem(tr.ItemBlob),
+                Item = tr.GetItem(),
                 CompanyLocationsList = companyLocationsList,
                 BackLocation = backLocation
             };
@@ -146,13 +148,20 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 return View(trVm);
             }
 
-            tr.ItemBlob = trVm.Item.ToBlob();
+            tr.SetItem(trVm.Item);
 
             bool trAlreadyExists = !(tr.Id == 0);
 
             if (trAlreadyExists)
             {
                 if (!CurrentUserHasAccess(tr)) return RedirectToPage($"/Identity/Account/AccessDenied");
+
+                string? currentUserId = CurrentApplicationUser()?.Id;
+                if (currentUserId is not null && !(tr.GetEditedByUsersIds().Contains(currentUserId)))
+                {
+                    tr.AddEditedByUserId(currentUserId);
+                }
+
                 _unitOfWork.TransferRequest.Update(tr);
                 _unitOfWork.Save();
             }
@@ -281,7 +290,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             TrViewModel vm = new TrViewModel
             {
                 TransferRequest = trFromDb,
-                Item            = Item.BlobToItem(trFromDb.ItemBlob),
+                Item            = trFromDb.GetItem(),
                 BackLocation    = backLocation
             };
 
