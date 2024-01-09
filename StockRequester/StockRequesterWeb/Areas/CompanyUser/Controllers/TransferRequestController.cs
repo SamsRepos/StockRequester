@@ -29,11 +29,22 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
             if (tr is null || !CurrentUserHasAccess(tr)) return NotFound();
 
+            Location? backLocation;
+            if (backLocationId is null)
+            {
+                backLocation = null;
+            }
+            else
+            {
+                backLocation = _unitOfWork.Location.Get(u => u.Id == backLocationId);
+                if (!CurrentUserHasAccess(backLocation)) return NotFound();
+            }
+
             TrInfoViewModel vm = new TrInfoViewModel
             {
                 TransferRequest = tr,
                 Item = tr.GetItem(),
-                BackLocation = backLocationId is not null ? _unitOfWork.Location.Get(u => u.Id == backLocationId) : null
+                BackLocation = backLocation
             };
 
             return View(vm);
@@ -102,12 +113,23 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 }
             );
 
+            Location? backLocation;
+            if(backLocationId is null)
+            {
+                backLocation = null;
+            }
+            else
+            {
+                backLocation = _unitOfWork.Location.Get(u => u.Id == backLocationId);
+                if(!CurrentUserHasAccess(backLocation)) return NotFound();
+            }
+
             TrUpsertViewModel trVm = new()
             {
                 TransferRequest = tr,
                 Item = Item.BlobToItem(tr.ItemBlob),
                 CompanyLocationsList = companyLocationsList,
-                BackLocation = backLocationId is not null ? _unitOfWork.Location.Get(u => u.Id == backLocationId) : null
+                BackLocation = backLocation
             };
 
             return View(trVm);
@@ -169,7 +191,19 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
             TempData["success"] = $"Transfer request {(trAlreadyExists ? "updated" : "created")} successfully";
 
-            return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
+            if(trVm.BackLocation is null)
+            {
+                return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
+            }
+            else
+            {
+                return RedirectToAction(
+                    nameof(LocationController.Index),
+                    ControllerUtility.ControllerName(typeof(LocationController)),
+                    new { id = trVm.BackLocation.Id }
+                );
+            }
+            
         }
 
         public IActionResult UpdateStatus(int id, int? backLocationId)
@@ -181,11 +215,22 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
             if(tr is null || !CurrentUserHasAccess(tr)) return NotFound();
 
+            Location? backLocation;
+            if (backLocationId is null)
+            {
+                backLocation = null;
+            }
+            else
+            {
+                backLocation = _unitOfWork.Location.Get(u => u.Id == backLocationId);
+                if (!CurrentUserHasAccess(backLocation)) return NotFound();
+            }
+
             UpdateStatusViewModel vm = new UpdateStatusViewModel
             {
                 TransferRequest = tr,
                 StatusesList    = SD.StatusesList(),
-                BackLocation    = backLocationId is not null ? _unitOfWork.Location.Get(u => u.Id == backLocationId) : null
+                BackLocation    = backLocation
             };
 
             return View(vm);

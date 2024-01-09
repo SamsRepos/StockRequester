@@ -49,7 +49,8 @@
 
         <div class="py-2 col-12" id="cancellationReason">
             <label asp-for="TransferRequest.Status.CancellationReason" class="p-0"></label>
-            <input asp-for="TransferRequest.Status.CancellationReason" type="text" required class="form-control" />
+            <input asp-for="TransferRequest.Status.CancellationReason" type="text" class="form-control" id="cancellation-reason" />
+            <span id="invalidCancellationReason" class="text-danger"></span>
             <span asp-validation-for="TransferRequest.Status.CancellationReason" class="text-danger"></span>
         </div>
 
