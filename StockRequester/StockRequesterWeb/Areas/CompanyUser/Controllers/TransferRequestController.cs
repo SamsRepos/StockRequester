@@ -260,7 +260,18 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
             TempData["success"] = $"Status updated: {vm.TransferRequest.Status.Status}";
 
-            return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
+            if (vm.BackLocation is null)
+            {
+                return RedirectToAction(nameof(CompanyController.Index), ControllerUtility.ControllerName(typeof(CompanyController)));
+            }
+            else
+            {
+                return RedirectToAction(
+                    nameof(LocationController.Index),
+                    ControllerUtility.ControllerName(typeof(LocationController)),
+                    new { id = vm.BackLocation.Id }
+                );
+            }
         }
 
         [Authorize(Roles = SD.Role_CompanyAdmin)]

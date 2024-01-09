@@ -32,6 +32,11 @@
         <input asp-for="TransferRequest.DestinationLocationId" hidden />
         <input asp-for="TransferRequest.OriginLocationId" hidden />
         <input asp-for="TransferRequest.Status.Id" hidden />
+        @if (Model.BackLocation != null)
+        {
+            <input asp-for="@Model.BackLocation.Id" hidden />
+            <input asp-for="@Model.BackLocation.Name" hidden />
+        }
 
         <div class="form-floating py-2 col-12">
             <select id="selectStatus" oninput="statusChange(this)" asp-for="TransferRequest.Status.Status" asp-items="@Model.StatusesList" class="form-select border-0 shadow">
@@ -49,7 +54,7 @@
 
         <div class="py-2 col-12" id="cancellationReason">
             <label asp-for="TransferRequest.Status.CancellationReason" class="p-0"></label>
-            <input asp-for="TransferRequest.Status.CancellationReason" type="text" class="form-control" id="cancellation-reason" />
+            <input asp-for="TransferRequest.Status.CancellationReason" required type="text" class="form-control" id="cancellation-reason" />
             <span id="invalidCancellationReason" class="text-danger"></span>
             <span asp-validation-for="TransferRequest.Status.CancellationReason" class="text-danger"></span>
         </div>

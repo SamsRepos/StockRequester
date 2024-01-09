@@ -19,7 +19,11 @@
         <input asp-for="TransferRequest.StatusId" hidden />
         <input asp-for="TransferRequest.Status" hidden />
         <input asp-for="TransferRequest.ItemBlob" hidden />
-        <input asp-for="BackLocation" hidden />
+        @if (Model.BackLocation != null)
+        {
+            <input asp-for="@Model.BackLocation.Id" hidden />
+            <input asp-for="@Model.BackLocation.Name" hidden />
+        }
 
         <div class="py-2 col-12">
             <label asp-for="Item.Name" class="p-0"></label>
@@ -30,6 +34,7 @@
         <div class="py-2 col-12">
             <label asp-for="Item.Description" class="ms-2 text-muted"></label>
             <textarea asp-for="Item.Description" class="form-control border-0 shadow"></textarea>
+            <span asp-validation-for="Item.Description" class="text-danger"></span>
         </div>
 
         <div class="py-2 col-12">
@@ -57,6 +62,7 @@
         <div class="py-2 col-12">
             <label asp-for="TransferRequest.MiscNotes" class="ms-2 text-muted"></label>
             <textarea asp-for="TransferRequest.MiscNotes" class="form-control border-0 shadow"></textarea>
+            <span asp-validation-for="TransferRequest.MiscNotes" class="text-danger"></span>
         </div>
 
         <div class="row p-1">
