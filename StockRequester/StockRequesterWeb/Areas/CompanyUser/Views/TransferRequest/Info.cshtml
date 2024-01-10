@@ -30,7 +30,14 @@
             <p class="card-subtitle">Edited By:</p>
             @foreach(string id in Model.TransferRequest.GetEditedByUsersIds())
             {
+                @if (Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id) is not null)
+                {
                 <p class="card-subtitle">- @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Name), @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Email)</p>
+                }
+                else
+                {
+                    <p class="card-subtitle">- @($"<User Not Found>")</p>
+                }
             }
         }
         
@@ -39,7 +46,14 @@
             <p class="card-subtitle">Status Updated By:</p>
             @foreach (string id in Model.TransferRequest.GetStatusChangedByUsersIds())
             {
-                <p class="card-subtitle">- @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Name), @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Email)</p>
+                @if(Model.AllCompanyUsers?.FirstOrDefault(u=>u.Id==id) is not null)
+                {
+                    <p class="card-subtitle">- @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Name), @(Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == id)?.Email)</p>
+                }
+                else
+                {
+                    <p class="card-subtitle">- @($"<User Not Found>")</p>
+                }
             }
         }
             

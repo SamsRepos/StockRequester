@@ -12,8 +12,8 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240109213559_AddCreatedByUserToTrTable")]
-    partial class AddCreatedByUserToTrTable
+    [Migration("20240110003319_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -376,6 +376,9 @@ namespace StockRequester.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<string>("EditedByUsersIdsBlob")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ItemBlob")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -390,6 +393,9 @@ namespace StockRequester.DataAccess.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<string>("StatusChangedByUsersIdsBlob")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
@@ -397,7 +403,9 @@ namespace StockRequester.DataAccess.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedByUserId")
+                        .IsUnique()
+                        .HasFilter("[CreatedByUserId] IS NOT NULL");
 
                     b.HasIndex("DestinationLocationId");
 
@@ -518,9 +526,9 @@ namespace StockRequester.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("StockRequester.Models.ApplicationUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithOne()
+                        .HasForeignKey("StockRequester.Models.TransferRequest", "CreatedByUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("StockRequester.Models.Location", "DestinationLocation")
                         .WithMany("TransferRequestsToThisDestination")

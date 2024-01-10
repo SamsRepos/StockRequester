@@ -400,7 +400,9 @@ namespace StockRequester.DataAccess.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedByUserId")
+                        .IsUnique()
+                        .HasFilter("[CreatedByUserId] IS NOT NULL");
 
                     b.HasIndex("DestinationLocationId");
 
@@ -521,9 +523,9 @@ namespace StockRequester.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("StockRequester.Models.ApplicationUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithOne()
+                        .HasForeignKey("StockRequester.Models.TransferRequest", "CreatedByUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("StockRequester.Models.Location", "DestinationLocation")
                         .WithMany("TransferRequestsToThisDestination")

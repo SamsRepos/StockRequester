@@ -46,7 +46,9 @@ namespace StockRequester.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TrackingInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CancellationReason = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -240,16 +242,26 @@ namespace StockRequester.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    EditedByUsersIdsBlob = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusChangedByUsersIdsBlob = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemBlob = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     DestinationLocationId = table.Column<int>(type: "int", nullable: false),
                     OriginLocationId = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
-                    MiscNotes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    MiscNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Archived = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransferRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TransferRequests_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_TransferRequests_Companies_CompanyId",
                         column: x => x.CompanyId,
@@ -288,8 +300,8 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "RequestStatuses",
-                columns: new[] { "Id", "Status" },
-                values: new object[] { 1, "Pending" });
+                columns: new[] { "Id", "CancellationReason", "Status", "TrackingInfo" },
+                values: new object[] { 1, null, "Pending", null });
 
             migrationBuilder.InsertData(
                 table: "Locations",
@@ -302,8 +314,8 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "TransferRequests",
-                columns: new[] { "Id", "CompanyId", "DestinationLocationId", "ItemBlob", "MiscNotes", "OriginLocationId", "Quantity", "StatusId" },
-                values: new object[] { 1, 1, 2, "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}", null, 1, 10, 1 });
+                columns: new[] { "Id", "Archived", "CompanyId", "CreatedByUserId", "DestinationLocationId", "EditedByUsersIdsBlob", "ItemBlob", "MiscNotes", "OriginLocationId", "Quantity", "StatusChangedByUsersIdsBlob", "StatusId" },
+                values: new object[] { 1, false, 1, null, 2, null, "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}", null, 1, 10, null, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -363,6 +375,13 @@ namespace StockRequester.DataAccess.Migrations
                 name: "IX_TransferRequests_CompanyId",
                 table: "TransferRequests",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransferRequests_CreatedByUserId",
+                table: "TransferRequests",
+                column: "CreatedByUserId",
+                unique: true,
+                filter: "[CreatedByUserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TransferRequests_DestinationLocationId",
