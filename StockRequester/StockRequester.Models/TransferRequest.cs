@@ -164,9 +164,21 @@ namespace StockRequester.Models
         //
 
         public DateTime? FirstCreatedDateTime { get; set; }
-
         public DateTime? DetailsLastEditedDateTime { get; set; }
-
         public DateTime? StatusLastUpdatedDateTime { get; set; }
+
+        public DateTime? MostRecentDateTime()
+        {
+            var allDateTimes = new List<DateTime?>
+            {
+                FirstCreatedDateTime,
+                DetailsLastEditedDateTime,
+                StatusLastUpdatedDateTime
+            };
+
+            return allDateTimes.Where(r => r.HasValue)
+                               .Max()
+                               .Value;
+        }
     }
 }

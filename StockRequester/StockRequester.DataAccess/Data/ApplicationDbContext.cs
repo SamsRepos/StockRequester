@@ -49,7 +49,8 @@ namespace StockRequester.DataAccess.Data
                     CompanyId             = 1,
                     OriginLocationId      = 1,
                     DestinationLocationId = 2,
-                    StatusId              = 1
+                    StatusId              = 1,
+                    FirstCreatedDateTime  = DateTime.Now,
                 }
             );
 
