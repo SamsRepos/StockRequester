@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockRequester.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110184007_DateTimeColumnsRename")]
+    partial class DateTimeColumnsRename
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,14 +370,11 @@ namespace StockRequester.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedByUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("DestinationLocationId")
                         .IsRequired()
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("DetailsLastEditedDateTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("EditedByUsersIdsBlob")
                         .HasColumnType("nvarchar(max)");
@@ -385,6 +385,9 @@ namespace StockRequester.DataAccess.Migrations
                     b.Property<string>("ItemBlob")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("MiscNotes")
                         .HasColumnType("nvarchar(max)");
@@ -402,12 +405,13 @@ namespace StockRequester.DataAccess.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("StatusLastUpdatedDateTime")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("CreatedByUserId")
+                        .IsUnique()
+                        .HasFilter("[CreatedByUserId] IS NOT NULL");
 
                     b.HasIndex("DestinationLocationId");
 
@@ -527,6 +531,11 @@ namespace StockRequester.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("StockRequester.Models.ApplicationUser", "CreatedByUser")
+                        .WithOne()
+                        .HasForeignKey("StockRequester.Models.TransferRequest", "CreatedByUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("StockRequester.Models.Location", "DestinationLocation")
                         .WithMany("TransferRequestsToThisDestination")
                         .HasForeignKey("DestinationLocationId")
@@ -546,6 +555,8 @@ namespace StockRequester.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
+
+                    b.Navigation("CreatedByUser");
 
                     b.Navigation("DestinationLocation");
 

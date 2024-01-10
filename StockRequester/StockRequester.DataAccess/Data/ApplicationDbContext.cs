@@ -67,10 +67,10 @@ namespace StockRequester.DataAccess.Data
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            modelBuilder.Entity<TransferRequest>()
-                .HasOne(b => b.CreatedByUser)
-                .WithOne()
-                .OnDelete(DeleteBehavior.SetNull);
+            //modelBuilder.Entity<TransferRequest>()
+            //    .HasOne(b => b.CreatedByUser)
+            //    .WithOne()
+            //    .OnDelete(DeleteBehavior.SetNull);
 
             //
             base.OnModelCreating(modelBuilder);

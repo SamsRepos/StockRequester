@@ -28,10 +28,6 @@ namespace StockRequester.Models
 
         public string? CreatedByUserId { get; set; }
 
-        [ValidateNever]
-        [ForeignKey(nameof(CreatedByUserId))]
-        public ApplicationUser? CreatedByUser { get; set; }
-
         //
         // Edited By Users:
         //
@@ -162,5 +158,15 @@ namespace StockRequester.Models
 
         [Required]
         public bool Archived { get; set; }
+
+        //
+        // Date and time:
+        //
+
+        public DateTime? FirstCreatedDateTime { get; set; }
+
+        public DateTime? DetailsLastEditedDateTime { get; set; }
+
+        public DateTime? StatusLastUpdatedDateTime { get; set; }
     }
 }

@@ -18,12 +18,11 @@
                     @(line)<br />
                 </p>
             }
-
-            <hr />
         }
-        
+
+        <hr />
         <h3 class="card-title">Associated Users</h3>
-        <p class="card-subtitle">Request Created By: @(Model.TransferRequest.CreatedByUser is not null ? $"{Model.TransferRequest.CreatedByUser.Name}, {Model.TransferRequest.CreatedByUser.Email}" : "<User Not Found>")</p>
+        <p class="card-subtitle">Request Created By: @(Model.TransferRequest.CreatedByUserId is not null ? $"{Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == Model.TransferRequest.CreatedByUserId)?.Name}, {Model.AllCompanyUsers?.FirstOrDefault(u => u.Id == Model.TransferRequest.CreatedByUserId)?.Email}" : "<User Not Found>")</p>
 
         @if(Model.TransferRequest.GetEditedByUsersIds().Count > 0)
         {
@@ -58,26 +57,25 @@
         }
             
         <hr />
-
         <h3 class="card-title">Request Details</h3>
         <p class="card-subtitle">Quantity: @Model.TransferRequest.Quantity</p>
         <p class="card-subtitle">From Origin: @(Model.TransferRequest.OriginLocation.Name)</p>
         <p class="card-subtitle">To Destination: @Model.TransferRequest.DestinationLocation.Name</p>
+        
         <hr />
-
         <h3 class="card-title">Status: @Model.TransferRequest.Status.Status</h3>
         @if(!string.IsNullOrEmpty(Model.TransferRequest.Status.TrackingInfo))
         {
-            <p class="card-text" style="display:inline">Tracking Info: @Model.TransferRequest.Status.TrackingInfo<br /></p>
+            <p class="card-subtitle">Tracking Info: @Model.TransferRequest.Status.TrackingInfo</p>
         }
         @if (!string.IsNullOrEmpty(Model.TransferRequest.Status.CancellationReason))
         {
-            <p class="card-text" style="display:inline">Cancellation Reason: @Model.TransferRequest.Status.CancellationReason<br /></p>
+            <p class="card-subtitle">Cancellation Reason: @Model.TransferRequest.Status.CancellationReason</p>
         }
-        <hr />
     
         @if(!string.IsNullOrWhiteSpace(Model.TransferRequest.MiscNotes))
         {
+            <hr />
             <h3 class="card-title">Miscellaneous Notes</h3>
             var lines = Model.TransferRequest.MiscNotes.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             
@@ -91,9 +89,34 @@
         }
 
     </div>
-    @* <div class="card-footer border-white text-muted">
-        card footer
-    </div> *@
+    @if (
+        Model.TransferRequest.FirstCreatedDateTime is not null || 
+        Model.TransferRequest.DetailsLastEditedDateTime is not null ||
+        Model.TransferRequest.StatusLastUpdatedDateTime is not null
+    )
+    {
+        <div class="card-footer border-white">
+            @if (Model.TransferRequest.FirstCreatedDateTime is not null)
+            {
+                <p class="card-subtitle">
+                    Transfer Request Created: @Model.TransferRequest.FirstCreatedDateTime.ToString()
+                </p>
+            }
+            @if (Model.TransferRequest.DetailsLastEditedDateTime is not null)
+            {
+                <p class="card-subtitle">
+                    Details Last Edited: @Model.TransferRequest.DetailsLastEditedDateTime.ToString()
+                </p>
+            }
+            @if (Model.TransferRequest.StatusLastUpdatedDateTime is not null)
+            {
+                <p class="card-subtitle">
+                    Status Last Updated: @Model.TransferRequest.StatusLastUpdatedDateTime.ToString()
+                </p>
+            }
+        </div>
+    }
+   
 </div>
 
 <div class="row p-1">

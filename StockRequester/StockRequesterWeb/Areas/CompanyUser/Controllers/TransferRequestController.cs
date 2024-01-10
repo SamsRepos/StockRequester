@@ -26,7 +26,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
         {
             TransferRequest? tr = _unitOfWork.TransferRequest.Get(
                 (u => u.Id == id),
-                includeProperties: $"{nameof(TransferRequest.Status)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)},{nameof(TransferRequest.CreatedByUser)}"
+                includeProperties: $"{nameof(TransferRequest.Status)},{nameof(TransferRequest.OriginLocation)},{nameof(TransferRequest.DestinationLocation)}"
             );
 
             if (tr is null || !CurrentUserHasAccess(tr)) return NotFound();
@@ -161,7 +161,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                 {
                     tr.AddEditedByUserId(currentUserId);
                 }
-
+                tr.DetailsLastEditedDateTime = DateTime.Now;
                 _unitOfWork.TransferRequest.Update(tr);
                 _unitOfWork.Save();
             }
@@ -181,6 +181,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
                 tr.StatusId = rs.Id;
                 tr.CreatedByUserId = CurrentApplicationUser()?.Id;
+                tr.FirstCreatedDateTime = DateTime.Now;
                 _unitOfWork.TransferRequest.Add(tr);
                 _unitOfWork.Save();
             }
@@ -248,9 +249,10 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
             if (currentUserId is not null && !(trFromDb.GetStatusChangedByUsersIds().Contains(currentUserId)))
             {
                 trFromDb.AddStatusChangedByUserId(currentUserId);
-                _unitOfWork.TransferRequest.Update(trFromDb);
-                _unitOfWork.Save();
             }
+            trFromDb.StatusLastUpdatedDateTime = DateTime.Now;
+            _unitOfWork.TransferRequest.Update(trFromDb);
+            _unitOfWork.Save();
 
             _unitOfWork.RequestStatus.Update(vm.TransferRequest.Status);
             _unitOfWork.Save();

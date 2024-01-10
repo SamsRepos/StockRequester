@@ -22,6 +22,9 @@
         <input asp-for="TransferRequest.CreatedByUserId" hidden />
         <input asp-for="TransferRequest.EditedByUsersIdsBlob" hidden />
         <input asp-for="TransferRequest.StatusChangedByUsersIdsBlob" hidden />
+        <input asp-for="TransferRequest.FirstCreatedDateTime" hidden />
+        <input asp-for="TransferRequest.StatusLastUpdatedDateTime" hidden />
+
 
 
         @if (Model.BackLocation != null)
