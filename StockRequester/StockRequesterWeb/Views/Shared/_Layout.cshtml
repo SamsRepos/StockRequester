@@ -45,8 +45,25 @@
                         }
                         @if (User.IsInRole(SD.Role_CompanyAdmin))
                         {
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                              <button type="button" class="btn btn-info">Company Admin</button>
+                              <div class="btn-group" role="group">
+                                <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle show" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+                                <div class="dropdown-menu show" aria-labelledby="btnGroupDrop3" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(0px, 40px, 0px);" data-popper-placement="bottom-start">
+                                  <a class="dropdown-item nav-link" asp-area="CompanyAdmin" asp-controller="CompanyUsers" asp-action="Index">Company Users</a>
+                                  <a class="dropdown-item nav-link" asp-area="CompanyAdmin" asp-controller="DefaultItemDescription" asp-action="Upsert">Default Item Description</a>
+                                </div>
+                              </div>
+                            </div>
+
+
+
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="CompanyAdmin" asp-controller="CompanyUsers" asp-action="Index">Company Users</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="CompanyAdmin" asp-controller="DefaultItemDescription" asp-action="Upsert">Default Item Description</a>
                             </li>
                         }
                     </ul>

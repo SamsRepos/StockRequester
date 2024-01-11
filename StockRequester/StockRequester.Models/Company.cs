@@ -27,5 +27,8 @@ namespace StockRequester.Models
         [ValidateNever]
         public ICollection<InvitedEmail> InvitedEmails { get; set; }
 
+        [ValidateNever]
+        public string? DefaultItemDescription { get; set; } // for pre-populating description field
+
     }
 }

@@ -10,7 +10,7 @@ namespace StockRequester.Models
     {
         public static Item BlobToItem(string blob)
         {
-            if(blob is null) return new Item();
+            if(string.IsNullOrEmpty(blob)) return new Item();
             return JsonConvert.DeserializeObject<Item>(blob);
         }
 

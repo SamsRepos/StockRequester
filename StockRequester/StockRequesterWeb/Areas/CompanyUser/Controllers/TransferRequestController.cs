@@ -70,7 +70,7 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
 
             TransferRequest tr;
             bool locationAlreadyExists = !(id is null || id == 0);
-            if (locationAlreadyExists) // update
+            if (locationAlreadyExists) // will be updating
             {
                 tr = _unitOfWork.TransferRequest.Get(
                     u => u.Id == id,
@@ -82,13 +82,22 @@ namespace StockRequesterWeb.Areas.CompanyUser.Controllers
                     return RedirectToPage($"/Identity/Account/AccessDenied");
                 }
             }
-            else // insert
+            else // will be inserting
             {
                 tr = new TransferRequest();
                 tr.CompanyId = (int)companyId;
 
                 tr.Company  = companyFromDb;
                 tr.Archived = false;
+
+                if(companyFromDb.DefaultItemDescription is not null)
+                {
+                    tr.SetItem(new Item
+                    {
+                        Name = "",
+                        Description = companyFromDb.DefaultItemDescription
+                    });
+                }
             }
 
             if (originLocationId is not null && originLocationId != 0)
