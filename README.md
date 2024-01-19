@@ -1,3 +1,3 @@
-A lightweight service for requesting stock transfers between locations
+A lightweight system for requesting stock transfers between locations
 
 Under construction
