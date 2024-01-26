@@ -45,7 +45,17 @@
                         }
                         @if (User.IsInRole(SD.Role_CompanyAdmin))
                         {
-                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Company Admin</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item nav-link" asp-area="CompanyAdmin" asp-controller="CompanyUsers" asp-action="Index">Company Users</a>
+                                    <a class="dropdown-item nav-link" asp-area="CompanyAdmin" asp-controller="DefaultItemDescription" asp-action="Upsert">Default Item Description</a>
+                                    @* <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Separated link</a> *@
+                                </div>
+                            </li>
+
+                            @* <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                               <button type="button" class="btn btn-info">Company Admin</button>
                               <div class="btn-group" role="group">
                                 <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle show" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
@@ -56,15 +66,13 @@
                               </div>
                             </div>
 
-
-
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="CompanyAdmin" asp-controller="CompanyUsers" asp-action="Index">Company Users</a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="CompanyAdmin" asp-controller="DefaultItemDescription" asp-action="Upsert">Default Item Description</a>
-                            </li>
+                            </li> *@
                         }
                     </ul>
 
