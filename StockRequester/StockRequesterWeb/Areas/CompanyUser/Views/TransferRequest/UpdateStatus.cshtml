@@ -48,15 +48,15 @@
             <span asp-validation-for="TransferRequest.Status.Status" class="text-danger"></span>
         </div>
 
-        <div class="py-2 col-12" id="trackingInfo">
+        <div class="py-2 col-12" id="trackingInfoDiv">
             <label asp-for="TransferRequest.Status.TrackingInfo" class="p-0"></label>
             <input asp-for="TransferRequest.Status.TrackingInfo" type="text" class="form-control" />
             <span asp-validation-for="TransferRequest.Status.TrackingInfo" class="text-danger"></span>
         </div>
 
-        <div class="py-2 col-12" id="cancellationReason">
+        <div class="py-2 col-12" id="cancellationReasonDiv">
             <label asp-for="TransferRequest.Status.CancellationReason" class="p-0"></label>
-            <input asp-for="TransferRequest.Status.CancellationReason" required type="text" class="form-control" id="cancellation-reason" />
+            <input asp-for="TransferRequest.Status.CancellationReason" required type="text" class="form-control" id="cancellationReason" />
             <span id="invalidCancellationReason" class="text-danger"></span>
             <span asp-validation-for="TransferRequest.Status.CancellationReason" class="text-danger"></span>
         </div>

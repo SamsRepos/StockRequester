@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Newtonsoft.Json;
 using StockRequester.Models;
 using StockRequester.Utility;
 
@@ -33,7 +31,7 @@ namespace StockRequester.DataAccess.Data
 
             modelBuilder.Entity<Location>().HasData(
                 new Location { Id = 1, Name = "Edinburgh", CompanyId = 1 },
-                new Location { Id = 2, Name = "Glasgow",   CompanyId = 1}
+                new Location { Id = 2, Name = "Glasgow",   CompanyId = 1 }
             );
 
             modelBuilder.Entity<TransferRequest>().HasData(
@@ -42,7 +40,7 @@ namespace StockRequester.DataAccess.Data
                     Id                    = 1,
                     ItemBlob              = Item.ItemToBlob(new Item
                                             {
-                                                Name = "Harry Potter",
+                                                Name        = "Harry Potter",
                                                 Description = "Wizarding World Book!"
                                             }),
                     Quantity              = 10,
