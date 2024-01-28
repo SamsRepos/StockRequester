@@ -2,13 +2,12 @@
 {
     statusChange();
     document.getElementById("selectStatus").addEventListener("change", statusChange);
-    document.getElementById("cancellationReason").addEventListener("keypress", validateCancellationReason);
+    document.getElementById("cancellationReason").addEventListener("input", validateCancellationReason);
+    document.getElementById("submitButton").addEventListener("click", handleSubmit);
 };
 
 function statusChange()
 {
-    console.log("Registering status change");
-
     var status = document.getElementById("selectStatus").value;
 
     var trackingInfoDiv = document.getElementById("trackingInfoDiv");
@@ -24,13 +23,11 @@ function statusChange()
 
 function validateCancellationReason()
 {
-    console.log("Validating cancellation reason");
-
-    var cancellationReasonInput = document.getElementById("cancellationReason");
     var status = document.getElementById("selectStatus").value;
 
     if (status === "Cancelled")
     {
+        var cancellationReasonInput = document.getElementById("cancellationReason");
         var value = cancellationReasonInput.value.trim();
 
         if (value === "" || isWhitespace(value))
@@ -62,3 +59,16 @@ function isWhitespace(str)
     }
 }
 
+function handleSubmit(event)
+{
+    var status = document.getElementById("selectStatus").value;
+
+    if (status === "Cancelled") {
+        var cancellationReasonInput = document.getElementById("cancellationReason");
+        var value = cancellationReasonInput.value.trim();
+
+        if (value === "" || isWhitespace(value)) {
+            event.preventDefault(); // Preventing form submission
+        }
+    }
+}

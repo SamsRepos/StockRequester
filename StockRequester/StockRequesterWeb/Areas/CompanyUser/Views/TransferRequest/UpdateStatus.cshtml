@@ -41,7 +41,7 @@
         }
 
         <div class="form-floating py-2 col-12">
-            <select id="selectStatus" oninput="statusChange(this)" asp-for="TransferRequest.Status.Status" asp-items="@Model.StatusesList" class="form-select border-0 shadow">
+            <select id="selectStatus" asp-for="TransferRequest.Status.Status" asp-items="@Model.StatusesList" class="form-select border-0 shadow">
                 <option disabled selected>--Select Status--</option>
             </select>
             <label asp-for="TransferRequest.Status.Status" class="ms-2 text-black"></label>
@@ -64,7 +64,7 @@
         <div class="row p-1">
             <div class="col-12 col-md-6">
                 <div class="w-100 btn-group" role="group">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" id="submitButton">
                         <i class="bi bi-check-circle"></i> Update Status
                     </button>
                     @await Html.PartialAsync("_BackButton", Model.BackLocation)
