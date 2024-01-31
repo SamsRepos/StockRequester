@@ -12,7 +12,7 @@ using StockRequester.DataAccess.Data;
 namespace StockRequester.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240110003319_FirstMigration")]
+    [Migration("20240131124027_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -240,6 +240,9 @@ namespace StockRequester.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("DefaultItemDescription")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -370,14 +373,20 @@ namespace StockRequester.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedByUserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DestinationLocationId")
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DetailsLastEditedDateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EditedByUsersIdsBlob")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("FirstCreatedDateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ItemBlob")
                         .IsRequired()
@@ -399,13 +408,12 @@ namespace StockRequester.DataAccess.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("StatusLastUpdatedDateTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("CreatedByUserId")
-                        .IsUnique()
-                        .HasFilter("[CreatedByUserId] IS NOT NULL");
 
                     b.HasIndex("DestinationLocationId");
 
@@ -422,6 +430,7 @@ namespace StockRequester.DataAccess.Migrations
                             Archived = false,
                             CompanyId = 1,
                             DestinationLocationId = 2,
+                            FirstCreatedDateTime = new DateTime(2024, 1, 31, 12, 40, 26, 987, DateTimeKind.Local).AddTicks(2697),
                             ItemBlob = "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}",
                             OriginLocationId = 1,
                             Quantity = 10,
@@ -525,11 +534,6 @@ namespace StockRequester.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("StockRequester.Models.ApplicationUser", "CreatedByUser")
-                        .WithOne()
-                        .HasForeignKey("StockRequester.Models.TransferRequest", "CreatedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("StockRequester.Models.Location", "DestinationLocation")
                         .WithMany("TransferRequestsToThisDestination")
                         .HasForeignKey("DestinationLocationId")
@@ -549,8 +553,6 @@ namespace StockRequester.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
-
-                    b.Navigation("CreatedByUser");
 
                     b.Navigation("DestinationLocation");
 

@@ -33,7 +33,8 @@ namespace StockRequester.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    DefaultItemDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -242,7 +243,7 @@ namespace StockRequester.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EditedByUsersIdsBlob = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StatusChangedByUsersIdsBlob = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemBlob = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -251,17 +252,14 @@ namespace StockRequester.DataAccess.Migrations
                     OriginLocationId = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
                     MiscNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Archived = table.Column<bool>(type: "bit", nullable: false)
+                    Archived = table.Column<bool>(type: "bit", nullable: false),
+                    FirstCreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DetailsLastEditedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StatusLastUpdatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransferRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TransferRequests_AspNetUsers_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_TransferRequests_Companies_CompanyId",
                         column: x => x.CompanyId,
@@ -290,12 +288,12 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Companies",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "DefaultItemDescription", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Bulky Books" },
-                    { 2, "Water Rocks" },
-                    { 3, "Nice Books" }
+                    { 1, null, "Bulky Books" },
+                    { 2, null, "Water Rocks" },
+                    { 3, null, "Nice Books" }
                 });
 
             migrationBuilder.InsertData(
@@ -314,8 +312,8 @@ namespace StockRequester.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "TransferRequests",
-                columns: new[] { "Id", "Archived", "CompanyId", "CreatedByUserId", "DestinationLocationId", "EditedByUsersIdsBlob", "ItemBlob", "MiscNotes", "OriginLocationId", "Quantity", "StatusChangedByUsersIdsBlob", "StatusId" },
-                values: new object[] { 1, false, 1, null, 2, null, "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}", null, 1, 10, null, 1 });
+                columns: new[] { "Id", "Archived", "CompanyId", "CreatedByUserId", "DestinationLocationId", "DetailsLastEditedDateTime", "EditedByUsersIdsBlob", "FirstCreatedDateTime", "ItemBlob", "MiscNotes", "OriginLocationId", "Quantity", "StatusChangedByUsersIdsBlob", "StatusId", "StatusLastUpdatedDateTime" },
+                values: new object[] { 1, false, 1, null, 2, null, null, new DateTime(2024, 1, 31, 12, 40, 26, 987, DateTimeKind.Local).AddTicks(2697), "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}", null, 1, 10, null, 1, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -375,13 +373,6 @@ namespace StockRequester.DataAccess.Migrations
                 name: "IX_TransferRequests_CompanyId",
                 table: "TransferRequests",
                 column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TransferRequests_CreatedByUserId",
-                table: "TransferRequests",
-                column: "CreatedByUserId",
-                unique: true,
-                filter: "[CreatedByUserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TransferRequests_DestinationLocationId",

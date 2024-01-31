@@ -427,7 +427,7 @@ namespace StockRequester.DataAccess.Migrations
                             Archived = false,
                             CompanyId = 1,
                             DestinationLocationId = 2,
-                            FirstCreatedDateTime = new DateTime(2024, 1, 11, 12, 19, 38, 996, DateTimeKind.Local).AddTicks(7451),
+                            FirstCreatedDateTime = new DateTime(2024, 1, 31, 12, 40, 26, 987, DateTimeKind.Local).AddTicks(2697),
                             ItemBlob = "{\"Name\":\"Harry Potter\",\"Description\":\"Wizarding World Book!\"}",
                             OriginLocationId = 1,
                             Quantity = 10,
