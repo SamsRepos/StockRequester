@@ -14,7 +14,7 @@ builder.Services.AddControllersWithViews();
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(connectionString)
+    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
