@@ -47,6 +47,12 @@ builder.Services.ConfigureApplicationCookie(
 
 builder.Services.AddRazorPages();
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -65,6 +71,7 @@ app.UseStatusCodePagesWithRedirects("/Views/Errors/{0}");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCookiePolicy();
 
 app.MapRazorPages();
 

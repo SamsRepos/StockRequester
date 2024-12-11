@@ -12,6 +12,7 @@
 
 </head>
 <body>
+    <partial name="_CookieConsentPartial" />
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark bg-primary border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -22,9 +23,6 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Home" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
                         @if(User.IsInRole(SD.Role_SiteAdmin))
                         {
                             <li class="nav-item">
