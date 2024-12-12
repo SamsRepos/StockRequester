@@ -48,7 +48,7 @@ namespace StockRequesterWeb.Areas.Home.Controllers
             return View();
         }
 
-        public IActionResult Donate()
+        public IActionResult About()
         {
             return View();
         }
