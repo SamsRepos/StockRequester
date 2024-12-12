@@ -56,9 +56,9 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 // Add reCAPTCHA configuration
 builder.Services.Configure<RecaptchaSettings>(options =>
 {
-    options.SiteKey = Environment.GetEnvironmentVariable("RECAPTCHA_SITE_KEY") 
+    options.SiteKey = Environment.GetEnvironmentVariable("STOCK_REQUESTER_RECAPTCHA_SITE_KEY") 
         ?? builder.Configuration["RecaptchaSettings:SiteKey"];
-    options.SecretKey = Environment.GetEnvironmentVariable("RECAPTCHA_SECRET_KEY") 
+    options.SecretKey = Environment.GetEnvironmentVariable("STOCK_REQUESTER_RECAPTCHA_SECRET_KEY") 
         ?? builder.Configuration["RecaptchaSettings:SecretKey"];
 });
 

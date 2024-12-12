@@ -7,11 +7,9 @@
     $env:STOCK_REQUESTER_CONNECTION_STRING
   # Set a temporary envar:
     $env:STOCK_REQUESTER_CONNECTION_STRING = "your-connection-string-here"
-  # Set a persistent envar:
+   # or
     Set-Item -Path Env:STOCK_REQUESTER_CONNECTION_STRING -Value "Server=localhost;Database=StockRequester;User=root;Password=<password here>;"
-  # or is it?
+  # Set a persistent envar (be sure to be running as Administrator):
     [System.Environment]::SetEnvironmentVariable("STOCK_REQUESTER_CONNECTION_STRING", "Server=localhost;Database=StockRequester;User=root;Password=<password here>;", "Machine")
   # Remove an envar:
     Remove-Item Env:STOCK_REQUESTER_CONNECTION_STRING
-
-  
