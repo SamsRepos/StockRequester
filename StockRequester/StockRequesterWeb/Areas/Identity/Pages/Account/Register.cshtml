@@ -41,6 +41,13 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            
+            <div class="mb-3">
+                <div class="g-recaptcha" data-sitekey="@Model.RecaptchaSiteKey" data-callback="onRecaptchaSuccess"></div>
+                <input type="hidden" asp-for="Input.RecaptchaResponse" id="recaptchaResponse" />
+                <span asp-validation-for="Input.RecaptchaResponse" class="text-danger"></span>
+            </div>
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
@@ -78,4 +85,10 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onRecaptchaSuccess(token) {
+            document.getElementById('recaptchaResponse').value = token;
+        }
+    </script>
 }

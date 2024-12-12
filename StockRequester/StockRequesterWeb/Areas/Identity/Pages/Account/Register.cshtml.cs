@@ -24,6 +24,10 @@ using StockRequester.DataAccess.Repository;
 using StockRequester.DataAccess.Repository.IRepository;
 using StockRequester.Models;
 using StockRequester.Utility;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using System.Net.Http;
+using System.Text.Json.Serialization;
 
 namespace StockRequesterWeb.Areas.Identity.Pages.Account
 {
@@ -37,6 +41,9 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguration _configuration;
+        private readonly IOptions<RecaptchaSettings> _recaptchaSettings;
+        private readonly HttpClient _httpClient;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -45,7 +52,9 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IOptions<RecaptchaSettings> recaptchaSettings,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -55,6 +64,8 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _unitOfWork = unitOfWork;
+            _recaptchaSettings = recaptchaSettings;
+            _httpClient = new HttpClient();
         }
 
         /// <summary>
@@ -75,6 +86,8 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+        public string RecaptchaSiteKey => _recaptchaSettings.Value.SiteKey;
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -122,6 +135,9 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
             [Required(ErrorMessage = "Please select an option")] public string? Role { get; set; }
             [ValidateNever] public IEnumerable<SelectListItem> RegisterRoleTextList {  get; set; }           
             
+            [Required(ErrorMessage = "Please complete the reCAPTCHA verification")]
+            [Display(Name = "ReCaptcha Response")]
+            public string RecaptchaResponse { get; set; }
         }
 
 
@@ -166,8 +182,36 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            // Repopulate the role list regardless of validation state
+            Input.RegisterRoleTextList = new List<SelectListItem>()
+            {
+                new SelectListItem(){
+                    Text  = SD.RegisterRoleText_CompanyUser,
+                    Value = SD.Role_CompanyUser
+                },
+                new SelectListItem(){
+                    Text  = SD.RegisterRoleText_CompanyAdmin,
+                    Value = SD.Role_CompanyAdmin
+                }
+            };
+
+            if (string.IsNullOrEmpty(Input.RecaptchaResponse))
+            {
+                ModelState.AddModelError(string.Empty, "Please complete the reCAPTCHA verification.");
+                return Page();
+            }
+
             if (ModelState.IsValid)
             {
+                // Verify reCAPTCHA
+                var recaptchaResponse = await VerifyRecaptchaAsync(Input.RecaptchaResponse);
+                if (!recaptchaResponse.Success)
+                {
+                    ModelState.AddModelError(string.Empty, "reCAPTCHA verification failed. Please try again.");
+                    return Page();
+                }
+
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -244,5 +288,31 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
         }
+
+        private async Task<RecaptchaVerificationResponse> VerifyRecaptchaAsync(string recaptchaResponse)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                {"secret", _recaptchaSettings.Value.SecretKey},
+                {"response", recaptchaResponse}
+            };
+
+            var response = await _httpClient.PostAsync(
+                "https://www.google.com/recaptcha/api/siteverify",
+                new FormUrlEncodedContent(parameters)
+            );
+
+            var jsonResponse = await response.Content.ReadFromJsonAsync<RecaptchaVerificationResponse>();
+            return jsonResponse;
+        }
+    }
+
+    public class RecaptchaVerificationResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+        
+        [JsonPropertyName("error-codes")]
+        public string[] ErrorCodes { get; set; }
     }
 }

@@ -53,6 +53,15 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
+// Add reCAPTCHA configuration
+builder.Services.Configure<RecaptchaSettings>(options =>
+{
+    options.SiteKey = Environment.GetEnvironmentVariable("RECAPTCHA_SITE_KEY") 
+        ?? builder.Configuration["RecaptchaSettings:SiteKey"];
+    options.SecretKey = Environment.GetEnvironmentVariable("RECAPTCHA_SECRET_KEY") 
+        ?? builder.Configuration["RecaptchaSettings:SecretKey"];
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
