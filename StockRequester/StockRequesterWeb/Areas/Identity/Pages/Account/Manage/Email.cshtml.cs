@@ -127,8 +127,8 @@ namespace StockRequesterWeb.Areas.Identity.Pages.Account.Manage
 
                 await _emailSender.SendEmailAsync(
                     email:       Input.NewEmail,
-                    subject:     "Verify your email address",
-                    htmlMessage: $"Please verify your email address by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
+                    subject:     "Verify your email address change",
+                    htmlMessage: $"Please verify your change in email address by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
                 );
 
                 StatusMessage = "Confirmation link to change email sent. Please check your email.";
