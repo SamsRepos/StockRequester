@@ -1,5 +1,9 @@
-public class RecaptchaSettings
+namespace StockRequesterWeb.Models
 {
-    public string SiteKey { get; set; }
-    public string SecretKey { get; set; }
-} 
+    public class RecaptchaSettings
+    {
+        public string SiteKey { get; set; }
+
+        public string SecretKey { get; set; }
+    }
+}

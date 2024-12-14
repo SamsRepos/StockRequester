@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using StockRequester.Utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using StockRequester.Models;
+using StockRequesterWeb.Models;
+using StockRequester.Utility.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +34,7 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 //builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -60,6 +62,17 @@ builder.Services.Configure<RecaptchaSettings>(options =>
         ?? builder.Configuration["RecaptchaSettings:SiteKey"];
     options.SecretKey = Environment.GetEnvironmentVariable("STOCK_REQUESTER_RECAPTCHA_SECRET_KEY") 
         ?? builder.Configuration["RecaptchaSettings:SecretKey"];
+});
+
+// Add AWS credentials configuration
+builder.Services.Configure<AwsSettings>(options =>
+{
+    options.Region = Environment.GetEnvironmentVariable("STOCK_REQUESTER_AWS_REGION")
+        ?? builder.Configuration["Aws:Region"];
+    options.AccessKey = Environment.GetEnvironmentVariable("STOCK_REQUESTER_AWS_ACCESS_KEY") 
+        ?? builder.Configuration["Aws:AccessKey"];
+    options.SecretKey = Environment.GetEnvironmentVariable("STOCK_REQUESTER_AWS_SECRET_KEY") 
+        ?? builder.Configuration["Aws:SecretKey"];
 });
 
 var app = builder.Build();
