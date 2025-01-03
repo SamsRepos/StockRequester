@@ -88,7 +88,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseStatusCodePagesWithRedirects("/Views/Errors/{0}");
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
 app.UseRouting();
 app.UseAuthentication();
